@@ -1,0 +1,107 @@
+.Header-QuickSec {
+    .Header {
+        // color:#db214c;
+        font-size: 16px;
+        background-color: var(--lightPink);
+        height: 70px;
+        padding:20px;
+        // width: 100vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .logo {
+            
+        }
+        .home {
+    
+        }
+        .search {
+            display: flex;
+            align-items: center;
+            height: 50px;
+            padding-right: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            width: 400px;
+            input {
+                border: none;
+                outline: none;
+                font-size: 16px;
+            }
+            .search-icon {
+                
+            }
+            .search-icon:hover {
+                cursor: pointer;
+                font-size: 25px;
+            }
+        }
+        .search-focus {
+            display: flex;
+            align-items: center;
+            height: 50px;
+            padding-right: 10px;
+            border: 1px solid #db214c;
+            border-radius: 5px;
+            width: 400px;
+            input {
+                border: none;
+                outline: none;
+                font-size: 16px;
+            }
+            .search-icon {
+                
+            }
+            .search-icon:hover {
+                cursor: pointer;
+                font-size: 25px;
+            }
+            
+        }
+        .support {
+    
+        }
+        .blog{
+    
+        }
+        .acc-cart {
+            display: flex;
+            align-items: center;
+            .account {
+                .pop-up {
+                    position: absolute;
+                    background-color: white;
+                    display: none;
+                    z-index: 2;
+                    margin-left: -50px;
+                    div {
+                        padding: 10px 10px;
+                        height: 50px;
+                        // width: 100px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        min-width: 100px;
+                    }
+
+                }
+            
+            }
+            .account:hover .pop-up{
+                display: block;
+                div:hover{
+                    background-color: #cccccc;
+                    cursor: pointer;
+                }
+            }
+            .cart {
+                
+            }
+        }
+    
+    }
+    .QuickSec {
+        
+    }
+}
