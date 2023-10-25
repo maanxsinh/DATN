@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 import { styled } from "@mui/material/styles";
@@ -20,8 +20,11 @@ import {
   warehouseInput,
   weightInput,
 } from "../../Reducer/sellerSlice";
+import { uploadProduct } from "../../Reducer/apiRequest";
+import { useNavigate } from "react-router-dom";
 
 const Upload = () => {
+  const navigate = useNavigate();
   const [productImg, setProductImg] = useState({ imgURL: null, image: null });
   const [warn, setWarn] = useState(false);
   const product = useSelector((state) => state.uploadProduct.product);
@@ -42,15 +45,19 @@ const Upload = () => {
       console.log(">>> IMAGE", objectUrl);
     }
   };
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
+    let today = new Date();
+    // console.log(">>> user:", user);
+    dispatch(datePostInput(today));
+    dispatch(IdAuthorInput(user.data.id));
+    // let today = new Date().toISOString().slice(0, 10);
+  }, []);
 
-  const handleOnClick = () => {
+  const handleOnClick = async () => {
     try {
-      let today = new Date().toISOString().slice(0, 10);
-      let today2 = new Date();
-      console.log(">>> get today:", today2);
-      dispatch(datePostInput(today2));
-      dispatch(IdAuthorInput(user.data.id));
-
       if (
         !product.name ||
         !product.sort ||
@@ -64,11 +71,9 @@ const Upload = () => {
       ) {
         setWarn(true);
         console.log(">>> thieu thong tin", product);
-        console.log(">>> USER", typeof user.data.createdAt);
-        console.log(">>> TODDAY:", typeof today);
       } else {
-        console.log(">>> UPLOAD SUCCESSFULL");
-        console.log(">>>>PRODUCT:", product);
+        console.log(">>> UPLOAD SUCCESSFULL", product);
+        await uploadProduct(product, dispatch);
       }
     } catch (e) {
       console.log(e);
@@ -125,6 +130,11 @@ const Upload = () => {
                     onChange={(e) => handleOnchangeFile(e)}
                   />
                 </div>
+                {warn && !product.image && (
+                  <Warn sx={{ marginLeft: "20px !important" }}>
+                    *Please fill out this field
+                  </Warn>
+                )}
                 {productImg.imgURL !== null && (
                   <div
                     style={{
@@ -153,6 +163,9 @@ const Upload = () => {
                     dispatch(nameInput(e.target.value));
                   }}
                 />
+                {warn && !product.name && (
+                  <Warn>*Please fill out this field</Warn>
+                )}
               </Typo>
               <Typo variant="h6" gutterBottom>
                 <Div>Sort</Div>
@@ -166,6 +179,9 @@ const Upload = () => {
                   <option value="iPad">iPad</option>
                   <option value=">iPhone Cases">iPhone Cases</option>
                 </Select>
+                {warn && !product.sort && (
+                  <Warn>*Please fill out this field</Warn>
+                )}
               </Typo>
               <Typo variant="h6" gutterBottom>
                 <Div>Description</Div>
@@ -176,6 +192,9 @@ const Upload = () => {
                     dispatch(descriptionInput(e.target.value));
                   }}
                 />
+                {warn && !product.description && (
+                  <Warn>*Please fill out this field</Warn>
+                )}
               </Typo>
             </Item>
             <Item
@@ -196,6 +215,9 @@ const Upload = () => {
                     dispatch(priceInput(e.target.value));
                   }}
                 />
+                {warn && !product.price && (
+                  <Warn>*Please fill out this field</Warn>
+                )}
               </Typo>
               <Typo variant="h6" gutterBottom>
                 <Div>Warehouse</Div>
@@ -205,6 +227,9 @@ const Upload = () => {
                     dispatch(warehouseInput(e.target.value));
                   }}
                 />
+                {warn && !product.warehouse && (
+                  <Warn>*Please fill out this field</Warn>
+                )}
               </Typo>
             </Item>
             <Item
@@ -239,6 +264,9 @@ const Upload = () => {
                   <option value="80%">80-89%</option>
                   <option value="70%">70-79%</option>
                 </Select>
+                {warn && !product.status && (
+                  <Warn>*Please fill out this field</Warn>
+                )}
               </Typo>
             </Item>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -274,7 +302,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const Div = styled("div")(({ theme }) => ({
   display: "flex",
   fontSize: "16px",
-  width: "150px",
+  width: "150px !important",
   justifyContent: "center",
   alignItems: "center",
 }));
@@ -290,9 +318,11 @@ const Label = styled("label")(({ theme }) => ({
 }));
 const Typo = styled(Typography)(({ theme }) => ({
   display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
 }));
 const Input = styled("input")(({ theme }) => ({
-  width: "950px",
+  width: "950px !important",
   borderRadius: "6px",
   fontSize: "16px",
 }));
@@ -302,4 +332,10 @@ const Select = styled("select")(({ theme }) => ({
   fontSize: "16px",
   textAlign: "center",
   border: "1px solid #999",
+  marginRight: "800px",
+}));
+const Warn = styled("div")(({ theme }) => ({
+  fontSize: "14px",
+  color: "red",
+  margin: "0px 0px 30px 152px",
 }));

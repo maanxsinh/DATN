@@ -7,6 +7,7 @@ import {
   logoutStart,
 } from "./userSlice";
 import { uploadFailed, uploadSuccessfull } from "./sellerSlice";
+import { loadSuccessfull } from "./homeProductSlice";
 
 const loginApp = async (email, password, dispatch, navigate) => {
   dispatch(loginStart());
@@ -24,15 +25,36 @@ const loginApp = async (email, password, dispatch, navigate) => {
 
 // SELLER REQUEST
 
-const uploadProduct = async (productInf, dispatch, navigate) => {
+const uploadProduct = async (dataPro, dispatch, navigate) => {
   try {
     let res = await axios.post(`${process.env.REACT_APP_PORT_API}/upload`, {
-      productInf,
+      dataPro,
     });
     dispatch(uploadSuccessfull(res.data));
+    console.log(res);
   } catch (e) {
     dispatch(uploadFailed());
   }
 };
 
-export { loginApp };
+//BUYER REQUEST
+
+// HOME REQUEST
+
+const homeProduct = async (sortBy, dispatch) => {
+  // dispatch(loadStart());
+  try {
+    let res = await axios.get(
+      `${process.env.REACT_APP_PORT_API}/loadingProduct`,
+      { params: { sortBy } }
+    );
+    if (res) {
+      console.log(">>>san pham:", res.data.product);
+    }
+    dispatch(loadSuccessfull(res));
+  } catch (e) {
+    // dispatch(loadError());
+  }
+};
+
+export { loginApp, uploadProduct, homeProduct };

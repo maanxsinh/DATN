@@ -39,7 +39,13 @@ const Header = () => {
     <div className="Header-QuickSec">
       <div className="Header">
         <div className="logo">logo</div>
-        <div className="home">HOME</div>
+        <div
+          className="home"
+          onClick={() => {
+            navigate("/");
+          }}>
+          HOME
+        </div>
         <div className={focus}>
           <input
             className="input"

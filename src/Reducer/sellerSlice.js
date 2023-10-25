@@ -4,6 +4,7 @@ const uploadProductSlice = createSlice({
   name: "product",
   initialState: {
     product: {
+      statusId: 4,
       name: null,
       sort: null,
       description: null,
@@ -50,6 +51,22 @@ const uploadProductSlice = createSlice({
     },
     datePostInput: (state, action) => {
       state.product.datePost = action.payload;
+    },
+    //reset state
+    reset: (state, action) => {
+      state.product = {
+        statusId: 4,
+        name: null,
+        sort: null,
+        description: null,
+        image: null,
+        price: null,
+        warehouse: null,
+        weight: null,
+        status: null,
+        IdAuthor: null,
+        datePost: null,
+      };
     },
     // upload
     uploadSuccessfull: (state, action) => {

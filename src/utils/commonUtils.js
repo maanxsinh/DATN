@@ -7,6 +7,12 @@ const getBase64 = (file) => {
   });
 };
 
+const bufferToBase64 = (img) => {
+  const imageShow = new Buffer(img, "base64").toString("binary");
+  return imageShow;
+};
+
 module.exports = {
   getBase64: getBase64,
+  bufferToBase64: bufferToBase64,
 };
