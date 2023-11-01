@@ -17,4 +17,6 @@ code {
 
 :root {
   --lightPink: #f5f2f3;
+  --pinky: rgba(219, 33, 76, 1);
+  --lightPinky60: rgba(219, 33, 76, 0.6);
 }

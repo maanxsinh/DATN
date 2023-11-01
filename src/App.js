@@ -5,6 +5,8 @@ import Home from "./pages/Home/index";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Upload from "./pages/Users/Upload";
 import ProductDetail from "./pages/ProductDetail";
+import Checkout from "./pages/Checkout";
+import Message from "./components/Message";
 
 const theme = createTheme({
   typography: {
@@ -20,6 +22,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/productdetail" element={<ProductDetail />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/mess" element={<Message />} />
       </Routes>
     </BrowserRouter>
   );

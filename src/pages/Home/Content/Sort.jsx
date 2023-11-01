@@ -14,12 +14,21 @@ const Sort = () => {
       setSort("none");
     }
   };
-  const Typo = styled(Typography)(({ theme }) => ({
+  const Typo13 = styled(Typography)(({ theme }) => ({
     display: sort,
     justifyContent: "flex-start",
     paddingTop: "10px",
     transition: "all 2s linear",
+    fontSize: "13px",
+    color: "black",
   }));
+
+  const Typo17 = styled(Typography)(({ theme }) => ({
+    fontSize: "17px",
+    color: "black",
+    fontWeight: "500",
+  }));
+
   const Div = styled("div")(({ theme }) => ({
     borderBottom: "1px solid #cccccc",
     padding: "20px 0px",
@@ -28,26 +37,24 @@ const Sort = () => {
   return (
     <Box sx={{ marginLeft: "20px" }}>
       <Div style={{ paddingBottom: "20px", borderBottom: "1px solid #cccccc" }}>
-        <Typography
-          variant="h6"
-          sx={{ display: "flex", cursor: "pointer" }}
+        <Typo17
+          sx={{ display: "flex", cursor: "pointer", fontSize: "17px" }}
           onClick={() => handleClick()}>
           Sort by
-        </Typography>
-        <Typo>Relevance</Typo>
-        <Typo>New & Trending</Typo>
-        <Typo>Featured</Typo>
+        </Typo17>
+        <Typo13>Relevance</Typo13>
+        <Typo13>New & Trending</Typo13>
+        <Typo13>Featured</Typo13>
       </Div>
       <Div>
-        <Typography
-          variant="h6"
+        <Typo17
           sx={{ display: "flex", cursor: "pointer" }}
           onClick={() => handleClick()}>
           Models
-        </Typography>
-        <Typo>Iphone 15</Typo>
-        <Typo>Iphone 14</Typo>
-        <Typo>Iphone 13</Typo>
+        </Typo17>
+        <Typo13>Iphone 15</Typo13>
+        <Typo13>Iphone 14</Typo13>
+        <Typo13>Iphone 13</Typo13>
       </Div>
     </Box>
   );

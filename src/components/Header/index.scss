@@ -1,10 +1,20 @@
 .Header-QuickSec {
+    .sale {
+        color:white;
+        background-color: black;
+        font-size:12px;
+        height: 28px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     .Header {
         // color:#db214c;
-        font-size: 16px;
+        font-size: 14px;
         background-color: var(--lightPink);
-        height: 70px;
+        height: 60px;
         padding:20px;
+        margin-top: 10px;
         // width: 100vw;
         display: flex;
         justify-content: space-between;
@@ -27,14 +37,14 @@
             input {
                 border: none;
                 outline: none;
-                font-size: 16px;
+                font-size: 14px;
             }
             .search-icon {
                 
             }
             .search-icon:hover {
                 cursor: pointer;
-                font-size: 25px;
+                font-size: 20px;
             }
         }
         .search-focus {
@@ -48,7 +58,7 @@
             input {
                 border: none;
                 outline: none;
-                font-size: 16px;
+                font-size: 14px;
             }
             .search-icon {
                 

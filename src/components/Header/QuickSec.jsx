@@ -10,6 +10,7 @@ const QuickSec = () => {
   const Typo = styled(Typography)(({ theme }) => ({
     padding: "10px",
     cursor: "pointer",
+    fontSize: "14px",
   }));
   const clickSelling = () => {
     if (!user) {

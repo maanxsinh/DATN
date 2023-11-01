@@ -7,6 +7,7 @@ import Paper from "@mui/material/Paper";
 import Sort from "./Sort";
 import Products from "./Products";
 import Title from "./Title";
+import Message from "../../../components/Message";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -36,6 +37,7 @@ const Content = () => {
           </Grid>
         </Grid>
       </Box>
+      <Message />
     </>
   );
 };

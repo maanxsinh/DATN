@@ -37,8 +37,16 @@ const Header = () => {
   };
   return (
     <div className="Header-QuickSec">
+      <div className="sale">
+        Up to 50% Off Our Best Sellers | Start Saving Now
+      </div>
       <div className="Header">
-        <div className="logo">logo</div>
+        <div className="logo">
+          <img
+            src="https://cdn.dribbble.com/users/844704/screenshots/17336702/media/5ba4c28448fb1f7bad2391c9acb53506.png"
+            style={{ height: "69px", width: "93px" }}
+          />
+        </div>
         <div
           className="home"
           onClick={() => {
