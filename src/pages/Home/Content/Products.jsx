@@ -9,12 +9,18 @@ import { homeProduct } from "../../../Reducer/apiRequest";
 import { loadingProduct } from "../../../Reducer/homeProductSlice";
 import { Buffer } from "buffer";
 import commonUtils from "../../../utils/commonUtils";
+import { useNavigate } from "react-router-dom";
+import { idProduct, loadingProductDetail } from "../../../Reducer/buyerSlice";
+import axios from "axios";
 
 window.Buffer = Buffer;
 
 const Products = () => {
   const [imageShow, setImageShow] = useState(null);
+  const navigate = useNavigate();
   const productInf = useSelector((state) => state.homeProduct.product);
+  const idProductDetail = useSelector((state) => state.productDetail.id);
+  const [IDproduct, setIDproduct] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchProduct = async () => {
@@ -22,20 +28,22 @@ const Products = () => {
       const inf = dispatch(loadingProduct({ sortBy }));
     };
     fetchProduct();
-    // const image = productInf[3].image.data;
-    // const base64String = new Buffer(image, "base64").toString("binary");
-    // setImageShow(base64String);
-    // console(">>>PORDUCT INF:", productInf);
   }, []);
 
-  const handleOnClick = async () => {
-    // const image = productInf.product[3].image.data;
-    // const base64String = new Buffer(image, "base64").toString("binary");
-    // setImageShow(base64String);
-    // console.log("...san pham...:", imageShow);
-    // const base64String = btoa(String.fromCharCode(...new Uint8Array(image)));
-    // const base64 = await commonUtils.bufferToBase64(image);
+  // const handleClickProduct = async (e) => {
+  //   console.log(">>>idProductDetail:", idProductDetail);
+  //   console.log("IDproduct:", IDproduct);
+  //   const data = dispatch(loadingProductDetail(IDproduct));
+  // };
+
+  const handleTestApi = async () => {
+    let id = "5";
+    let res = await axios.get("http://localhost:8080/productDetail", {
+      params: { id },
+    });
+    console.log(">>>TEST API:", res);
   };
+
   return (
     <Box sx={{ marginLeft: "20px" }}>
       <Grid container spacing={2}>
@@ -44,7 +52,15 @@ const Products = () => {
           productInf.map((item) => {
             return (
               <Grid xs={3}>
-                <Div>
+                <Div
+                  key={item.id}
+                  onClick={(e) => {
+                    setIDproduct(item.id);
+                    dispatch(idProduct(item.id));
+                    // handleClickProduct();
+                    dispatch(loadingProductDetail(item.id));
+                    navigate(`/productDetail/${item.id}`);
+                  }}>
                   <img
                     src={item.imageToBase64}
                     alt="Girl in a jacket"
@@ -58,13 +74,6 @@ const Products = () => {
                       flexDirection: "column",
                       justifyContent: "flex-start",
                     }}>
-                    {/* <Typo
-                      sx={{ display: "flex", justifyContent: "flex-start" }}
-                      variant="subtitle2"
-                      display="block"
-                      gutterBottom>
-                      {item.sort}
-                    </Typo> */}
                     <Typo
                       sx={{
                         marginTop: "-5px",
@@ -100,7 +109,9 @@ const Products = () => {
             );
           })}
 
-        <Grid xs={3}></Grid>
+        <Grid xs={3}>
+          <Div onClick={() => handleTestApi()}>test api</Div>
+        </Grid>
         <Grid xs={3}>
           <Div>xs=4</Div>
         </Grid>

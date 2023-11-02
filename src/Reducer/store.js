@@ -4,6 +4,7 @@ import { uploadProductSlice } from "./sellerSlice.js";
 import { homeProductSlice } from "./homeProductSlice.js";
 import logger from "redux-logger";
 import { messageSlice } from "./messageSlice.js";
+import { productDetail } from "./buyerSlice.js";
 
 const reducerSlice = createSlice({
   name: "store",
@@ -20,6 +21,7 @@ const store = configureStore({
     homeProduct: homeProductSlice.reducer,
     reducerSlice: reducerSlice.reducer,
     messageSlice: messageSlice.reducer,
+    productDetail: productDetail.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

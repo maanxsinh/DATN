@@ -4,11 +4,12 @@ import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { BsCartPlus } from "react-icons/bs";
-import { GrContact } from "react-icons/gr";
 import Header from "../../components/Header";
 import { AiOutlineMessage } from "react-icons/ai";
+import { useSelector } from "react-redux";
 
 const ProductDetail = () => {
+  const data = useSelector((state) => state.productDetail.data);
   return (
     <>
       <Header />
@@ -23,8 +24,12 @@ const ProductDetail = () => {
         <Item>
           <div>
             <img
-              src="https://ctl.s6img.com/society6/img/6Y76ks-fAXJxQ5D6XRvfl211h9Y/w_700/cases/iphone15/slim/back/~artwork,fw_1300,fh_2000,fx_-100,iw_1499,ih_2000/s6-original-art-uploads/society6/uploads/misc/4130672dfeda4367bdb76e6cadc940ca/~~/exotic-garden-night-xxi-cases.jpg?attempt=0"
-              style={{ height: "586px", width: "586px" }}
+              src={data.imageToBase64}
+              style={{
+                height: "586px",
+                width: "586px",
+                border: "1px solid #cccccc",
+              }}
             />
             <div>
               <Box
@@ -73,12 +78,12 @@ const ProductDetail = () => {
         </Item>
         <Item>
           <div style={{ marginLeft: "42px" }}>
-            <Typo20 gutterBottom>EXOTIC GARDEN - NIGHT XXI iPhone Case</Typo20>
-            <Typo16 gutterBottom>by Burcu Korkmazyurek</Typo16>
+            <Typo20 gutterBottom>{data.name}</Typo20>
+            <Typo16 gutterBottom>by {data.User.fullName}</Typo16>
             <Span13>★★★★★</Span13>
             <Span13 sx={{ marginLeft: "10px" }}>1 review</Span13>
             <Typo16 sx={{ marginTop: "75px", fontWeight: "500" }} gutterBottom>
-              $22.00
+              {data.price}
             </Typo16>
             <Typo16 sx={{ marginTop: "40px" }} gutterBottom>
               MODEL

@@ -14,9 +14,7 @@ const Message = () => {
   const [showConversation, setShow] = useState(false);
   const [showMess123, setShow123] = useState(false);
 
-  useEffect(() => {
-    console.log(showMess);
-  }, []);
+  useEffect(() => {}, []);
 
   const handleShowMessage = async () => {
     await dispatch(showMessage());

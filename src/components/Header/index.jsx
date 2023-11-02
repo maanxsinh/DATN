@@ -28,9 +28,7 @@ const Header = () => {
   const [age, setAge] = React.useState("");
 
   const userInf = useSelector((state) => state.auth.login.currentUser);
-  useEffect(() => {
-    console.log(">>> USER INF", userInf);
-  }, []);
+  useEffect(() => {}, []);
 
   const handleChange = (event) => {
     setAge(event.target.value);
