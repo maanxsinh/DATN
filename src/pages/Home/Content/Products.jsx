@@ -6,7 +6,11 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { homeProduct } from "../../../Reducer/apiRequest";
-import { loadingProduct } from "../../../Reducer/homeProductSlice";
+import { loadingProduct } from "../../../Reducer/apiRequest";
+import {
+  getProduct,
+  loadingProductThunk,
+} from "../../../Reducer/loadProductSlice";
 import { Buffer } from "buffer";
 import commonUtils from "../../../utils/commonUtils";
 import { useNavigate } from "react-router-dom";
@@ -18,14 +22,15 @@ window.Buffer = Buffer;
 const Products = () => {
   const [imageShow, setImageShow] = useState(null);
   const navigate = useNavigate();
-  const productInf = useSelector((state) => state.homeProduct.product);
-  const idProductDetail = useSelector((state) => state.productDetail.id);
+  const productInf = useSelector((state) => state.loadProductSlice.product);
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
   const [IDproduct, setIDproduct] = useState(null);
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log(">>>currentUser:", currentUser);
     const fetchProduct = async () => {
-      const sortBy = "iPhone";
-      const inf = dispatch(loadingProduct({ sortBy }));
+      const statusId = "CONFIRMED";
+      await loadingProduct(statusId, null, dispatch);
     };
     fetchProduct();
   }, []);
@@ -37,11 +42,12 @@ const Products = () => {
   // };
 
   const handleTestApi = async () => {
-    let id = "5";
-    let res = await axios.get("http://localhost:8080/productDetail", {
-      params: { id },
-    });
-    console.log(">>>TEST API:", res);
+    // let id = "5";
+    // let res = await axios.get("http://localhost:8080/productDetail", {
+    //   params: { id },
+    // });
+    // console.log(">>>TEST API:", res);
+    console.log(">>>product:", productInf);
   };
 
   return (
@@ -51,14 +57,14 @@ const Products = () => {
           productInf.length > 0 &&
           productInf.map((item) => {
             return (
-              <Grid xs={3}>
+              <Grid xs={3} key={item.id}>
                 <Div
                   key={item.id}
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     setIDproduct(item.id);
                     dispatch(idProduct(item.id));
                     // handleClickProduct();
-                    dispatch(loadingProductDetail(item.id));
+                    await dispatch(loadingProductDetail(item.id));
                     navigate(`/productDetail/${item.id}`);
                   }}>
                   <img

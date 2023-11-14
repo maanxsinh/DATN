@@ -8,6 +8,8 @@ import {
 } from "./userSlice";
 import { uploadFailed, uploadSuccessfull } from "./sellerSlice";
 import { loadSuccessfull } from "./homeProductSlice";
+import { getError, getProduct, getStart } from "./loadProductSlice";
+import { emitter } from "../utils/emitter";
 
 const loginApp = async (email, password, dispatch, navigate) => {
   dispatch(loginStart());
@@ -21,6 +23,34 @@ const loginApp = async (email, password, dispatch, navigate) => {
   } catch (e) {
     dispatch(loginFailed());
   }
+};
+// MANAGE REQUEST
+const deleteProduct = async (productId, statusId, IdAuthor, dispatch) => {
+  try {
+    let res = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/deleteProduct`,
+      {
+        productId,
+      }
+    );
+    console.log(">>>delete success", res, ">>>>", productId);
+    await loadingProduct(statusId, IdAuthor, dispatch);
+    emitter.emit("EVENT_DELETE_DATA");
+  } catch (e) {}
+};
+
+const confirmProduct = async (productId, statusId, IdAuthor, dispatch) => {
+  try {
+    let res = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/confirmProduct`,
+      {
+        productId,
+      }
+    );
+    await loadingProduct(statusId, IdAuthor, dispatch);
+    emitter.emit("EVENT_CONFIRM_DATA");
+    console.log(">>>confirm success", res);
+  } catch (e) {}
 };
 
 // SELLER REQUEST
@@ -41,20 +71,24 @@ const uploadProduct = async (dataPro, dispatch, navigate) => {
 
 // HOME REQUEST
 
-const homeProduct = async (sortBy, dispatch) => {
-  // dispatch(loadStart());
+const loadingProduct = async (statusId, IdAuthor, dispatch) => {
+  dispatch(getStart());
   try {
     let res = await axios.get(
       `${process.env.REACT_APP_PORT_API}/loadingProduct`,
-      { params: { sortBy } }
+      { params: { statusId, IdAuthor } }
     );
-    if (res) {
-      console.log(">>>san pham:", res.data.product);
-    }
-    dispatch(loadSuccessfull(res));
+    console.log(">>>san pham:", res.data.data);
+    dispatch(getProduct(res.data.data));
   } catch (e) {
-    // dispatch(loadError());
+    dispatch(getError());
   }
 };
 
-export { loginApp, uploadProduct, homeProduct };
+export {
+  loginApp,
+  uploadProduct,
+  loadingProduct,
+  deleteProduct,
+  confirmProduct,
+};

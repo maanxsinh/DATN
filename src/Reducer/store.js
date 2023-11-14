@@ -5,6 +5,9 @@ import { homeProductSlice } from "./homeProductSlice.js";
 import logger from "redux-logger";
 import { messageSlice } from "./messageSlice.js";
 import { productDetail } from "./buyerSlice.js";
+import { manageProduct } from "./manageSlice.js";
+import { loadProductSlice } from "./loadProductSlice.js";
+import { snackbarSlice } from "./snackbarSlice.js";
 
 const reducerSlice = createSlice({
   name: "store",
@@ -22,6 +25,9 @@ const store = configureStore({
     reducerSlice: reducerSlice.reducer,
     messageSlice: messageSlice.reducer,
     productDetail: productDetail.reducer,
+    manageProduct: manageProduct.reducer,
+    loadProductSlice: loadProductSlice.reducer,
+    snackbarSlice: snackbarSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });

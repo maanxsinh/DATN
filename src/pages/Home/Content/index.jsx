@@ -8,6 +8,7 @@ import Sort from "./Sort";
 import Products from "./Products";
 import Title from "./Title";
 import Message from "../../../components/Message";
+import { useSelector } from "react-redux";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -20,6 +21,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const Content = () => {
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
   return (
     <>
       <Title />
@@ -37,7 +39,7 @@ const Content = () => {
           </Grid>
         </Grid>
       </Box>
-      <Message />
+      {currentUser && <Message />}
     </>
   );
 };

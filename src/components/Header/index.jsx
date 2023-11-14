@@ -11,10 +11,12 @@ import MenuItem from "@mui/material/MenuItem";
 import FormHelperText from "@mui/material/FormHelperText";
 import QuickSec from "./QuickSec";
 import { Box } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { logoutSuccess } from "../../Reducer/userSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [focus, setFocus] = useState("search");
   const onFocus = () => {
@@ -125,7 +127,14 @@ const Header = () => {
             ) : (
               <div className="pop-up">
                 <div>My account</div>
-                <div>Log out</div>
+                <div onClick={() => navigate("/manage")}>Management</div>
+                <div
+                  onClick={() => {
+                    dispatch(logoutSuccess());
+                    navigate("/login");
+                  }}>
+                  Log out
+                </div>
               </div>
             )}
           </div>

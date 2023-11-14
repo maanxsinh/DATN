@@ -4,7 +4,7 @@ const uploadProductSlice = createSlice({
   name: "product",
   initialState: {
     product: {
-      statusId: 4,
+      statusId: "NEW",
       name: null,
       sort: null,
       description: null,
@@ -55,7 +55,7 @@ const uploadProductSlice = createSlice({
     //reset state
     reset: (state, action) => {
       state.product = {
-        statusId: 4,
+        statusId: "NEW",
         name: null,
         sort: null,
         description: null,

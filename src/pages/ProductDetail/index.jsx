@@ -1,15 +1,41 @@
 import Box from "@mui/material/Box";
-import React from "react";
+import React, { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { BsCartPlus } from "react-icons/bs";
 import Header from "../../components/Header";
 import { AiOutlineMessage } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import commonUtils from "../../utils/commonUtils";
+import { useNavigate } from "react-router-dom";
+import Message from "../../components/Message";
+import axios from "axios";
+import { showAllMessage, showMessage } from "../../Reducer/messageSlice";
 
 const ProductDetail = () => {
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
+  const showMess = useSelector((state) => state.messageSlice.showMessage);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const data = useSelector((state) => state.productDetail.data);
+
+  useEffect(() => {
+    // console.log(">>>image:", data.imageToBase64);
+  }, []);
+  const handleContact = async () => {
+    let ID1 = currentUser.data.id;
+    let ID2 = data.User.id;
+    await commonUtils.createConversation(
+      currentUser,
+      navigate,
+      axios,
+      ID1,
+      ID2
+    );
+    dispatch(showAllMessage());
+    dispatch(showMessage());
+  };
   return (
     <>
       <Header />
@@ -24,6 +50,7 @@ const ProductDetail = () => {
         <Item>
           <div>
             <img
+              alt="productImage"
               src={data.imageToBase64}
               style={{
                 height: "586px",
@@ -107,7 +134,9 @@ const ProductDetail = () => {
                 <BsCartPlus style={{}} />
                 &nbsp;&nbsp;Add To Cart
               </BtAddToCart>
-              <BtAddToCart sx={{ width: "49%" }}>
+              <BtAddToCart
+                sx={{ width: "49%" }}
+                onClick={() => handleContact()}>
                 <AiOutlineMessage style={{ color: "white" }} />
                 &nbsp;&nbsp;Contact
               </BtAddToCart>
@@ -136,6 +165,7 @@ const ProductDetail = () => {
           </div>
         </Item>
       </Box>
+      <Message />
     </>
   );
 };

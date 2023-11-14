@@ -6,15 +6,31 @@ import { BiMessageDetail } from "react-icons/bi";
 import MessageOutlinedIcon from "@mui/icons-material/MessageOutlined";
 import Badge from "@mui/material/Badge";
 import { useDispatch, useSelector } from "react-redux";
-import { showMessage } from "../../Reducer/messageSlice";
+import {
+  showMessage,
+  showAllMessage,
+  hiddenAll,
+  getAllConversation,
+} from "../../Reducer/messageSlice";
+import { useNavigate } from "react-router-dom";
 
 const Message = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/login");
+    }
+  }, []);
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
+
+  const dataConversation = useSelector((state) => state.messageSlice.data);
+
   const showMess = useSelector((state) => state.messageSlice.showMessage);
+  const showAll = useSelector((state) => state.messageSlice.showAll);
+
   const [showConversation, setShow] = useState(false);
   const [showMess123, setShow123] = useState(false);
-
-  useEffect(() => {}, []);
 
   const handleShowMessage = async () => {
     await dispatch(showMessage());
@@ -23,12 +39,13 @@ const Message = () => {
   };
   return (
     <Box sx={{ position: "fixed", bottom: 0, right: 20 }}>
-      {!showConversation ? (
+      {!showAll ? (
         <Badge badgeContent={4} color="error">
           <BiMessageDetail
             style={{ fontSize: "50px" }}
             onClick={() => {
-              setShow(true);
+              dispatch(showAllMessage());
+              dispatch(getAllConversation(currentUser.data.id));
             }}
           />
         </Badge>
@@ -50,7 +67,7 @@ const Message = () => {
                 color: "rgba(0,0,0,0.5)",
               }}
               onClick={() => {
-                setShow(false);
+                dispatch(hiddenAll());
               }}
             />
           </Box>
@@ -60,11 +77,11 @@ const Message = () => {
               handleShowMessage();
             }}>
             <img
-              src="https://scontent.fhan19-1.fna.fbcdn.net/v/t39.30808-6/337265738_1223053261930875_507114862488518461_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=sNne8Q0iKXkAX8pqF-t&_nc_ht=scontent.fhan19-1.fna&oh=00_AfAKyq7BSREd7VRHMuXeSlRbxzrQe3B6VNPWdabVF0ACvw&oe=6545758A"
+              src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
               style={{ width: "55px", height: "55px", borderRadius: "50px" }}
             />
             <Box sx={{ margin: "0 0 0 10px" }}>
-              <Typo15>To Van Luc</Typo15>
+              <Typo15>{dataConversation.imsender[0].id}</Typo15>
               <Typo12>gia dt nay bao nhieu?</Typo12>
             </Box>
           </BoxElement>

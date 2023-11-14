@@ -26,7 +26,7 @@ const productDetail = createSlice({
         state.data.image.data,
         "base64"
       ).toString("binary");
-      console.log(">>>data:", state.data.imageToBase64);
+      console.log(">>>data:", state.data);
     });
     builder.addCase(loadingProductDetail.rejected, (state) => {
       state.isLoading = false;

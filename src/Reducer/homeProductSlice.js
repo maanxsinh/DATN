@@ -27,13 +27,13 @@ const homeProductSlice = createSlice({
     });
     builder.addCase(loadingProduct.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.product = action.payload.data.product;
-      state.product.map((item) => {
-        item.imageToBase64 = new Buffer(item.image.data, "base64").toString(
-          "binary"
-        );
-        return item;
-      });
+      state.product = action.payload;
+      // state.product.map((item) => {
+      //   item.imageToBase64 = new Buffer(item.image.data, "base64").toString(
+      //     "binary"
+      //   );
+      //   return item;
+      // });
       // console.log("FULFILLED", { state, action });
       console.log("SAN PAHM:", state.product);
     });
@@ -47,10 +47,10 @@ const homeProductSlice = createSlice({
 
 export const loadingProduct = createAsyncThunk(
   "load/product",
-  async (sortBy, dispatch) => {
+  async (sortBy, authorId) => {
     const res = await axios.get(
       `${process.env.REACT_APP_PORT_API}/loadingProduct`,
-      { params: sortBy }
+      { params: { sortBy, authorId } }
     );
     return res;
   }

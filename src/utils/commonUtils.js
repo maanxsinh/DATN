@@ -12,7 +12,41 @@ const bufferToBase64 = (img) => {
   return imageShow;
 };
 
+const createConversation = async (currentUser, navigate, axios, ID1, ID2) => {
+  if (!currentUser) {
+    navigate("/login");
+  }
+  const bothID1 = `${ID1}&${ID2}`;
+  const bothID2 = `${ID2}&${ID1}`;
+  const conversationInf1 = {
+    idMaster: ID1,
+    conversationName: `${ID1}&${ID2}`,
+  };
+  const conversationInf2 = {
+    idMaster: ID2,
+    conversationName: `${ID2}&${ID1}`,
+  };
+  let isExist1 = await axios.post(
+    `${process.env.REACT_APP_PORT_API}/conversationExist`,
+    { bothID: bothID1 }
+  );
+  let isExist2 = await axios.post(
+    `${process.env.REACT_APP_PORT_API}/conversationExist`,
+    { bothID: bothID2 }
+  );
+
+  if (!isExist1.data.isExist && !isExist2.data.isExist) {
+    let data = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/createConversation`,
+      { idMaster: ID1, conversationName: `${ID1}&${ID2}` }
+    );
+  }
+  console.log(">>>isExist1:", isExist1.data.isExist);
+  console.log(">>>isExist2:", isExist2.data.isExist);
+};
+
 module.exports = {
   getBase64: getBase64,
   bufferToBase64: bufferToBase64,
+  createConversation: createConversation,
 };

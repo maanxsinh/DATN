@@ -13,7 +13,7 @@ const Conversation = () => {
       <Header>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <img
-            src="https://scontent.fhan19-1.fna.fbcdn.net/v/t39.30808-6/337265738_1223053261930875_507114862488518461_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=sNne8Q0iKXkAX8pqF-t&_nc_ht=scontent.fhan19-1.fna&oh=00_AfAKyq7BSREd7VRHMuXeSlRbxzrQe3B6VNPWdabVF0ACvw&oe=6545758A"
+            src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
             style={{ width: "32px", height: "32px", borderRadius: "50px" }}
           />
           &nbsp;&nbsp;To Van Luc
@@ -36,37 +36,14 @@ const Conversation = () => {
           </OwnMessage>
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <OwnMessage>
-            dien thoai any gia bao nieuafojdsaflsdahfklsdhafbksdjafhiudshfkjsdh
-          </OwnMessage>
-        </Box>
-
         <Box sx={{ display: "flex", margin: "5px 0 0 5px" }}>
           <img
-            src="https://scontent.fhan19-1.fna.fbcdn.net/v/t39.30808-6/337265738_1223053261930875_507114862488518461_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=sNne8Q0iKXkAX8pqF-t&_nc_ht=scontent.fhan19-1.fna&oh=00_AfAKyq7BSREd7VRHMuXeSlRbxzrQe3B6VNPWdabVF0ACvw&oe=6545758A"
+            src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
             style={{ width: "27px", height: "27px", borderRadius: "50px" }}
           />
           <PartnerMessage>
             tim mot noi ma khong co ai nhin chungt ta
           </PartnerMessage>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <OwnMessage>
-            dien thoai any gia bao nieuafojdsaflsdahfklsdhafbksdjafhiudshfkjsdh
-          </OwnMessage>
-        </Box>
-        <Box sx={{ display: "flex", margin: "5px 0 0 5px" }}>
-          <img
-            src="https://scontent.fhan19-1.fna.fbcdn.net/v/t39.30808-6/337265738_1223053261930875_507114862488518461_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=5f2048&_nc_ohc=sNne8Q0iKXkAX8pqF-t&_nc_ht=scontent.fhan19-1.fna&oh=00_AfAKyq7BSREd7VRHMuXeSlRbxzrQe3B6VNPWdabVF0ACvw&oe=6545758A"
-            style={{ width: "27px", height: "27px", borderRadius: "50px" }}
-          />
-          <PartnerMessage>may nay gia 100 cu khoai</PartnerMessage>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-          <OwnMessage>
-            dien thoai any gia bao nieuafojdsaflsdahfklsdhafbksdjafhiudshfkjsdh
-          </OwnMessage>
         </Box>
       </Content>
       <TypingText>
