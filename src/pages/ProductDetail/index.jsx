@@ -12,13 +12,22 @@ import { useNavigate } from "react-router-dom";
 import Message from "../../components/Message";
 import axios from "axios";
 import { showAllMessage, showMessage } from "../../Reducer/messageSlice";
+import { setProductToAdd } from "../../Reducer/addToCartSlice";
+import { isProductExist } from "../../Reducer/apiRequest";
+import {
+  openSbTrue,
+  setSnackbarMessage,
+  severitySuccess,
+  severityWarning,
+} from "../../Reducer/snackbarSlice";
+import SnackbarComponent from "../../components/Snackbar";
 
 const ProductDetail = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser);
+  const data = useSelector((state) => state.productDetail.data);
   const showMess = useSelector((state) => state.messageSlice.showMessage);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.productDetail.data);
 
   useEffect(() => {
     // console.log(">>>image:", data.imageToBase64);
@@ -35,6 +44,28 @@ const ProductDetail = () => {
     );
     dispatch(showAllMessage());
     dispatch(showMessage());
+  };
+
+  const handleAddToCart = async () => {
+    // console.log("currentUser", currentUser.data.id, "data Product:", data);
+    const dataProduct = {
+      authorName: data.User.fullName,
+      ownCartId: currentUser.data.id,
+      productId: data.id,
+    };
+    console.log(">>>dataProduct:", dataProduct);
+    dispatch(setProductToAdd(dataProduct));
+    let res = await isProductExist(dataProduct);
+    console.log("...add product result--->", res);
+    if (res === "success") {
+      dispatch(severitySuccess());
+      dispatch(setSnackbarMessage("Add to cart successfull"));
+      dispatch(openSbTrue());
+    } else {
+      dispatch(severityWarning());
+      dispatch(setSnackbarMessage("Product is existed"));
+      dispatch(openSbTrue());
+    }
   };
   return (
     <>
@@ -130,7 +161,9 @@ const ProductDetail = () => {
             </DivQuantity>
             <BtBuyNow>Buy Now</BtBuyNow>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <BtAddToCart sx={{ width: "49%" }}>
+              <BtAddToCart
+                sx={{ width: "49%" }}
+                onClick={() => handleAddToCart()}>
                 <BsCartPlus style={{}} />
                 &nbsp;&nbsp;Add To Cart
               </BtAddToCart>
@@ -165,6 +198,7 @@ const ProductDetail = () => {
           </div>
         </Item>
       </Box>
+      <SnackbarComponent />
       <Message />
     </>
   );

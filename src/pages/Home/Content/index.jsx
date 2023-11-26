@@ -9,13 +9,14 @@ import Products from "./Products";
 import Title from "./Title";
 import Message from "../../../components/Message";
 import { useSelector } from "react-redux";
+import Footer from "../../../components/Footer";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: "center",
-  maxHeight: "150vh",
+  // maxHeight: "150vh",
   color: theme.palette.text.secondary,
   marginTop: "10px",
 }));

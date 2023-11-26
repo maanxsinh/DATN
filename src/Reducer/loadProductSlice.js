@@ -4,7 +4,7 @@ import axios from "axios";
 const loadProductSlice = createSlice({
   name: "loadProduct",
   initialState: {
-    product: null,
+    product: [],
     isLoading: false,
     error: false,
   },
@@ -26,7 +26,7 @@ const loadProductSlice = createSlice({
         );
         return item;
       });
-      console.log("get Product", state.product);
+      // console.log("get Product", state.product);
     },
     extraReducers: (builder) => {
       builder.addCase(loadingProductThunk.pending, (state) => {

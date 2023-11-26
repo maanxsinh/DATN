@@ -185,13 +185,19 @@ const Upload = () => {
               </Typo>
               <Typo variant="h6" gutterBottom>
                 <Div>Description</Div>
-                <Input
-                  type="text"
-                  style={{ minHeight: "150px" }}
-                  onChange={(e) => {
-                    dispatch(descriptionInput(e.target.value));
-                  }}
-                />
+                <LabelInput for="text">
+                  <Input
+                    type="text"
+                    style={{
+                      wordBreak: "break-all",
+                      wordWrap: "break-word",
+                      height: "80px",
+                    }}
+                    onChange={(e) => {
+                      dispatch(descriptionInput(e.target.value));
+                    }}
+                  />
+                </LabelInput>
                 {warn && !product.description && (
                   <Warn>*Please fill out this field</Warn>
                 )}
@@ -322,7 +328,7 @@ const Typo = styled(Typography)(({ theme }) => ({
   flexWrap: "wrap",
 }));
 const Input = styled("input")(({ theme }) => ({
-  width: "950px !important",
+  width: "850px !important",
   borderRadius: "6px",
   fontSize: "16px",
 }));
@@ -332,10 +338,16 @@ const Select = styled("select")(({ theme }) => ({
   fontSize: "16px",
   textAlign: "center",
   border: "1px solid #999",
-  marginRight: "800px",
+  // marginRight: "800px",
 }));
 const Warn = styled("div")(({ theme }) => ({
   fontSize: "14px",
   color: "red",
   margin: "0px 0px 30px 152px",
+}));
+
+const LabelInput = styled("label")(({ theme }) => ({
+  border: "1px solid green",
+  height: "150px",
+  width: "850px",
 }));

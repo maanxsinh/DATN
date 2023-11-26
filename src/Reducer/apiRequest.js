@@ -10,6 +10,13 @@ import { uploadFailed, uploadSuccessfull } from "./sellerSlice";
 import { loadSuccessfull } from "./homeProductSlice";
 import { getError, getProduct, getStart } from "./loadProductSlice";
 import { emitter } from "../utils/emitter";
+import {
+  getAuthorArray,
+  getCartFailed,
+  getCartStart,
+  getCartSuccess,
+  getDeliveryAddressInf,
+} from "./buyerSlice";
 
 const loginApp = async (email, password, dispatch, navigate) => {
   dispatch(loginStart());
@@ -19,7 +26,12 @@ const loginApp = async (email, password, dispatch, navigate) => {
       password,
     });
     dispatch(loginSuccess(res.data));
-    navigate("/");
+    console.log(">>> check admin:", res.data.data.typeRole);
+    if (res.data.data.typeRole === "R1") {
+      navigate("/admin");
+    } else {
+      navigate("/");
+    }
   } catch (e) {
     dispatch(loginFailed());
   }
@@ -69,6 +81,59 @@ const uploadProduct = async (dataPro, dispatch, navigate) => {
 
 //BUYER REQUEST
 
+const isProductExist = async (data) => {
+  try {
+    let res = await axios.get(
+      `${process.env.REACT_APP_PORT_API}/isProductExist`,
+      {
+        params: { data },
+      }
+    );
+    console.log("...check product exist:", res.data.isExist);
+    if (!res.data.isExist) {
+      let res = await addToCart(data);
+      return "success";
+    } else {
+      return "product exist: true";
+    }
+  } catch (e) {}
+};
+
+const addToCart = async (data) => {
+  try {
+    let res = await axios.post(`${process.env.REACT_APP_PORT_API}/addToCart`, {
+      data,
+    });
+    console.log("...addToCart:", res);
+  } catch (e) {}
+};
+
+const getCart = async (ownCartId, dispatch) => {
+  dispatch(getCartStart());
+  try {
+    let res = await axios.get(`${process.env.REACT_APP_PORT_API}/getCart`, {
+      params: { ownCartId },
+    });
+    dispatch(getCartSuccess(res.data.cart));
+    dispatch(getAuthorArray(res.data.authorArray));
+    console.log(">>>>res:", res.data);
+  } catch (e) {
+    dispatch(getCartFailed());
+  }
+};
+
+const getDeliveryAddress = async (userId, dispatch) => {
+  try {
+    let res = await axios.get(
+      `${process.env.REACT_APP_PORT_API}/getAddressDelivery`,
+      {
+        params: { userId },
+      }
+    );
+    dispatch(getDeliveryAddressInf(res.data.inf));
+  } catch (e) {}
+};
+
 // HOME REQUEST
 
 const loadingProduct = async (statusId, IdAuthor, dispatch) => {
@@ -78,7 +143,7 @@ const loadingProduct = async (statusId, IdAuthor, dispatch) => {
       `${process.env.REACT_APP_PORT_API}/loadingProduct`,
       { params: { statusId, IdAuthor } }
     );
-    console.log(">>>san pham:", res.data.data);
+    // console.log(">>>san pham:", res.data.data);
     dispatch(getProduct(res.data.data));
   } catch (e) {
     dispatch(getError());
@@ -91,4 +156,8 @@ export {
   loadingProduct,
   deleteProduct,
   confirmProduct,
+  isProductExist,
+  addToCart,
+  getCart,
+  getDeliveryAddress,
 };

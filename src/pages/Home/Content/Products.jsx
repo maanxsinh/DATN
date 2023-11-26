@@ -15,17 +15,24 @@ import { Buffer } from "buffer";
 import commonUtils from "../../../utils/commonUtils";
 import { useNavigate } from "react-router-dom";
 import { idProduct, loadingProductDetail } from "../../../Reducer/buyerSlice";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
 import axios from "axios";
 
 window.Buffer = Buffer;
 
 const Products = () => {
-  const [imageShow, setImageShow] = useState(null);
   const navigate = useNavigate();
+  const [currentPage, setCurrentPage] = useState(1);
   const productInf = useSelector((state) => state.loadProductSlice.product);
   const currentUser = useSelector((state) => state.auth.login.currentUser);
-  const [IDproduct, setIDproduct] = useState(null);
+  const [data, setData] = useState(null);
+  const [npage, setNpage] = useState(null);
+  const [IdProduct, setIDproduct] = useState(null);
   const dispatch = useDispatch();
+
+  //main
+
   useEffect(() => {
     console.log(">>>currentUser:", currentUser);
     const fetchProduct = async () => {
@@ -33,7 +40,30 @@ const Products = () => {
       await loadingProduct(statusId, null, dispatch);
     };
     fetchProduct();
+
+    // handle change page
+    // if (productInf && productInf.length > 0) {
+    //   const recordsPerPage = 16;
+    //   const lastIndex = currentPage * recordsPerPage;
+    //   const firtIndex = lastIndex - recordsPerPage;
+    //   setData(productInf.slice(firtIndex, lastIndex));
+    //   setNpage(Math.ceil(productInf.length / recordsPerPage));
+    //   const numbers = [...Array(npage + 1).keys()];
+    // }
   }, []);
+
+  const handleChangePage = (event, value) => {
+    setCurrentPage(value);
+  };
+  // handle change page
+  if (productInf && productInf.length > 0) {
+    const recordsPerPage = 4;
+    const lastIndex = currentPage * recordsPerPage;
+    const firtIndex = lastIndex - recordsPerPage;
+    var dataProduct = productInf.slice(firtIndex, lastIndex);
+    var nPage = Math.ceil(productInf.length / recordsPerPage);
+    const numbers = [...Array(npage + 1).keys()];
+  }
 
   // const handleClickProduct = async (e) => {
   //   console.log(">>>idProductDetail:", idProductDetail);
@@ -47,15 +77,17 @@ const Products = () => {
     //   params: { id },
     // });
     // console.log(">>>TEST API:", res);
-    console.log(">>>product:", productInf);
+    // const data = productInf.slice(0, 12);
+    console.log(">>>currentPage:", currentPage);
+    console.log(">>>length:", data.length);
   };
 
   return (
     <Box sx={{ marginLeft: "20px" }}>
       <Grid container spacing={2}>
-        {productInf &&
-          productInf.length > 0 &&
-          productInf.map((item) => {
+        {dataProduct &&
+          dataProduct.length > 0 &&
+          dataProduct.map((item) => {
             return (
               <Grid xs={3} key={item.id}>
                 <Div
@@ -114,29 +146,20 @@ const Products = () => {
               </Grid>
             );
           })}
-
         <Grid xs={3}>
-          <Div onClick={() => handleTestApi()}>test api</Div>
-        </Grid>
-        <Grid xs={3}>
-          <Div>xs=4</Div>
-        </Grid>
-        <Grid xs={3}>
-          <Div>xs=8</Div>
-        </Grid>
-        <Grid xs={3}>
-          <Div>xs=8</Div>
-        </Grid>
-        <Grid xs={3}>
-          <Div>xs=4</Div>
-        </Grid>
-        <Grid xs={3}>
-          <Div>xs=4</Div>
-        </Grid>
-        <Grid xs={3}>
-          <Div>xs=8</Div>
+          <button onClick={() => handleTestApi()}>test</button>
         </Grid>
       </Grid>
+      <Stack spacing={2}>
+        <Pagination
+          sx={{ display: "flex", justifyContent: "center" }}
+          count={nPage}
+          variant="outlined"
+          shape="rounded"
+          page={currentPage}
+          onChange={handleChangePage}
+        />
+      </Stack>
     </Box>
   );
 };

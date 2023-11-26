@@ -14,6 +14,8 @@ import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logoutSuccess } from "../../Reducer/userSlice";
+import Badge from "@mui/material/Badge";
+import MailIcon from "@mui/icons-material/Mail";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -139,9 +141,12 @@ const Header = () => {
             )}
           </div>
           <div className="cart">
-            <PiShoppingCartSimple
-              style={{ fontSize: "27px", marginRight: "10px" }}
-            />
+            <Badge badgeContent={4} color="error">
+              <PiShoppingCartSimple
+                onClick={() => navigate("/cart")}
+                style={{ fontSize: "27px" }}
+              />
+            </Badge>
           </div>
         </div>
       </div>

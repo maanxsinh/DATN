@@ -13,6 +13,7 @@ const SnackbarComponent = (message = "") => {
   const snackbarMessage = useSelector(
     (state) => state.snackbarSlice.snackbarMessage
   );
+  const severity = useSelector((state) => state.snackbarSlice.severity);
   const handleClick = () => {
     setOpen(true);
     dispatch(openSbTrue());
@@ -35,9 +36,9 @@ const SnackbarComponent = (message = "") => {
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={openSnackbar}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>

@@ -36,6 +36,52 @@ const productDetail = createSlice({
   },
 });
 
+const getCartSlice = createSlice({
+  name: "getCart",
+  initialState: {
+    cart: [],
+    isLoading: false,
+    error: false,
+    authorArr: [],
+  },
+  reducers: {
+    getCartStart: (state) => {
+      state.isLoading = true;
+    },
+    getCartSuccess: (state, action) => {
+      state.isLoading = false;
+      state.cart = action.payload;
+      state.cart.map((item) => {
+        item.imageToBase64 = new Buffer(
+          item.Product.image.data,
+          "base64"
+        ).toString("binary");
+        return item;
+      });
+      // console.log("action.payload:", state.cart[0].Product.image.data);
+    },
+    getCartFailed: (state) => {
+      state.isLoading = false;
+      state.error = true;
+    },
+    getAuthorArray: (state, action) => {
+      state.authorArr = action.payload;
+    },
+  },
+});
+
+const deliveryAddressSlice = createSlice({
+  name: "delivery address",
+  initialState: {
+    deliveryAddress: null,
+  },
+  reducers: {
+    getDeliveryAddressInf: (state, action) => {
+      state.deliveryAddress = action.payload;
+    },
+  },
+});
+
 export const loadingProductDetail = createAsyncThunk(
   "load/productDetail",
   async (id) => {
@@ -50,5 +96,7 @@ export const loadingProductDetail = createAsyncThunk(
 );
 
 export const { idProduct } = productDetail.actions;
-
-export { productDetail };
+export const { getCartStart, getCartSuccess, getCartFailed, getAuthorArray } =
+  getCartSlice.actions;
+export const { getDeliveryAddressInf } = deliveryAddressSlice.actions;
+export { productDetail, getCartSlice, deliveryAddressSlice };

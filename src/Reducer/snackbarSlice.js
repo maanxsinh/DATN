@@ -5,6 +5,7 @@ const snackbarSlice = createSlice({
   initialState: {
     openSnackbar: false,
     snackbarMessage: "",
+    severity: "success",
   },
   reducers: {
     openSbTrue: (state) => {
@@ -16,10 +17,21 @@ const snackbarSlice = createSlice({
     setSnackbarMessage: (state, action) => {
       state.snackbarMessage = action.payload;
     },
+    severityWarning: (state, action) => {
+      state.severity = "warning";
+    },
+    severitySuccess: (state) => {
+      state.severity = "success";
+    },
   },
 });
 
-export const { openSbTrue, openSbFalse, setSnackbarMessage } =
-  snackbarSlice.actions;
+export const {
+  openSbTrue,
+  openSbFalse,
+  setSnackbarMessage,
+  severityWarning,
+  severitySuccess,
+} = snackbarSlice.actions;
 
 export { snackbarSlice };

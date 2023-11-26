@@ -45,8 +45,17 @@ const createConversation = async (currentUser, navigate, axios, ID1, ID2) => {
   console.log(">>>isExist2:", isExist2.data.isExist);
 };
 
+const toVnd = (price) => {
+  const priceConvert = price.toLocaleString("vi", {
+    style: "currency",
+    currency: "VND",
+  });
+  return priceConvert;
+};
+
 module.exports = {
   getBase64: getBase64,
   bufferToBase64: bufferToBase64,
   createConversation: createConversation,
+  toVnd: toVnd,
 };

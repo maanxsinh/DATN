@@ -8,6 +8,10 @@ import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
 import Message from "./components/Message";
 import Manage from "./components/Manage";
+import Footer from "./components/Footer";
+import Cart from "./pages/Cart";
+import TheMap from "./components/GgMap";
+import AdminManage from "./pages/Admin";
 
 const theme = createTheme({
   typography: {
@@ -26,6 +30,9 @@ const App = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/mess" element={<Message />} />
         <Route path="/manage" element={<Manage />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/map" element={<TheMap />} />
+        <Route path="/admin" element={<AdminManage />} />
       </Routes>
     </BrowserRouter>
   );

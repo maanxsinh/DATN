@@ -1,13 +1,18 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
-import { authSlice } from "./userSlice.js";
+import { authSlice, managementSlice } from "./userSlice.js";
 import { uploadProductSlice } from "./sellerSlice.js";
 import { homeProductSlice } from "./homeProductSlice.js";
 import logger from "redux-logger";
 import { messageSlice } from "./messageSlice.js";
-import { productDetail } from "./buyerSlice.js";
+import {
+  deliveryAddressSlice,
+  getCartSlice,
+  productDetail,
+} from "./buyerSlice.js";
 import { manageProduct } from "./manageSlice.js";
 import { loadProductSlice } from "./loadProductSlice.js";
 import { snackbarSlice } from "./snackbarSlice.js";
+import { addToCartSlice } from "./addToCartSlice.js";
 
 const reducerSlice = createSlice({
   name: "store",
@@ -28,8 +33,15 @@ const store = configureStore({
     manageProduct: manageProduct.reducer,
     loadProductSlice: loadProductSlice.reducer,
     snackbarSlice: snackbarSlice.reducer,
+    addToCartSlice: addToCartSlice.reducer,
+    getCartSlice: getCartSlice.reducer,
+    deliveryAddressSlice: deliveryAddressSlice.reducer,
+    manageSlice: managementSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export default store;
