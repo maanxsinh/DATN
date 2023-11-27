@@ -15,38 +15,59 @@ import Button from "@mui/material/Button";
 import SnackbarComponent from "../Snackbar";
 // import { openSbTrue, setSnackbarMessage } from "../../Reducer/snackbarSlice";
 import CircularProgress from "@mui/material/CircularProgress";
+import EditUser from "../../../components/EditUser";
+import { getUserIdEdit } from "../../../Reducer/userSlice";
+import { emitter } from "../../../utils/emitter";
+import CreateUser from "../../../components/EditUser/CreateUser";
+import {
+  openSbTrue,
+  setSnackbarMessage,
+  severitySuccess,
+} from "../../../Reducer/snackbarSlice";
+import { deleteUser } from "../../../Reducer/apiRequest";
 
 const UsersManage = () => {
   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(null);
+  const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
-  const product = useSelector((state) => state.loadProductSlice.product);
-  const user = useSelector((state) => state.auth.login.currentUser);
   const users = useSelector((state) => state.manageSlice.data);
   const isLoading = useSelector((state) => state.manageSlice.isLoading);
+  const userId = useSelector((state) => state.editUserSlice.userId);
   const snackbarMessage = useSelector(
     (state) => state.snackbarSlice.snackbarMessage
   );
 
   const dispatch = useDispatch();
-  const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
     setAction(null);
   };
-  console.log(">>>users:", users);
+
+  const handleDeleteUser = (e) => {
+    setOpen(true);
+    setAction("delete");
+  };
 
   const handleChangeAll = (e) => {};
 
   const handleChooseUser = (e) => {};
 
-  const handleAction = () => {};
+  const handleAction = () => {
+    setOpen(false);
+    deleteUser(userId, dispatch);
+    // console.log("---userId:", userId);
+    dispatch(openSbTrue());
+    dispatch(severitySuccess());
+    dispatch(setSnackbarMessage("Delete user successfull"));
+  };
 
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   return (
     <>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Box sx={{ width: "80vw", margin: "50px 0 80px 0" }}>
+          <CreateUser />
           <Box
             sx={{
               flexGrow: 1,
@@ -56,13 +77,13 @@ const UsersManage = () => {
             <Grid container spacing={2}>
               <Grid xs={0.5}>
                 <Head>
-                  <Checkbox
+                  {/* <Checkbox
                     {...label}
                     color="default"
                     value={selected.length}
                     checked={selected.length}
                     onChange={(e) => handleChangeAll(e)}
-                  />
+                  /> */}
                 </Head>
               </Grid>
               <Grid xs={2}>
@@ -86,7 +107,7 @@ const UsersManage = () => {
             </Grid>
           </Box>
           {!isLoading && users && users.length > 0 ? (
-            users.map((item) => {
+            users.map((item, index) => {
               return (
                 <Box
                   key={item.id}
@@ -98,7 +119,7 @@ const UsersManage = () => {
                   <Grid container spacing={2}>
                     <Grid xs={0.5}>
                       <Item>
-                        <Checkbox
+                        {/* <Checkbox
                           {...label}
                           color="default"
                           value={item.id}
@@ -112,7 +133,7 @@ const UsersManage = () => {
                             );
                             // setIsCheck(e.target.checked);
                           }}
-                        />
+                        /> */}
                       </Item>
                     </Grid>
                     <Grid xs={2}>
@@ -138,20 +159,18 @@ const UsersManage = () => {
                       <Item sx={{ overflow: "auto" }}>{item.address}</Item>
                     </Grid>
                     <Grid xs={1.5}>
-                      <Item sx={{ flexDirection: "column" }}>
-                        {item.statusId === "NEW" && (
-                          <Action>
-                            <AiFillSafetyCertificate />
-                            &nbsp;&nbsp;Comfirm
-                          </Action>
-                        )}
-                        <Action>
+                      <Item sx={{}}>
+                        <Action
+                          onClick={() => {
+                            handleDeleteUser();
+                            dispatch(getUserIdEdit(item.id));
+                          }}>
                           <BsFillTrash3Fill />
-                          &nbsp;&nbsp;Delete
                         </Action>
-                        <Action>
-                          <AiFillEdit />
-                          &nbsp;&nbsp;Edit
+                        <Action
+                          onClick={() => dispatch(getUserIdEdit(item.id))}>
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <EditUser />
                         </Action>
                       </Item>
                     </Grid>
@@ -222,7 +241,7 @@ export default UsersManage;
 
 const Item = styled(Box)(({ theme }) => ({
   fontSize: "14px",
-  height: "80px",
+  height: "50px",
   display: "flex",
   alignItems: "flex-start",
 }));
@@ -258,9 +277,9 @@ const Action = styled(Box)(({ theme }) => ({
   fontSize: "14px",
   padding: "5px 0",
   cursor: "pointer",
-  "&:hover": {
-    color: "var(--pinky)",
-  },
+  // "&:hover": {
+  //   color: "var(--pinky)",
+  // },
 }));
 
 const Actions = styled(Box)(({ theme }) => ({
@@ -279,6 +298,16 @@ const Actions = styled(Box)(({ theme }) => ({
 const ButtonAction = styled("button")(({ theme }) => ({
   height: "45px",
   border: "none",
+  "&:hover": {
+    opacity: "0.8",
+  },
+}));
+
+const ButtonCreate = styled("button")(({ theme }) => ({
+  height: "45px",
+  border: "none",
+  backgroundColor: "var(--pinky)",
+  margin: "0 0 30px 0",
   "&:hover": {
     opacity: "0.8",
   },

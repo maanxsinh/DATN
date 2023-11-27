@@ -17,6 +17,7 @@ import {
   getUsers,
   managementAction,
 } from "../../Reducer/userSlice";
+import { emitter } from "../../utils/emitter";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="right" ref={ref} {...props} />;
@@ -38,6 +39,7 @@ export default function Snackbar() {
   const handleGetUsers = async () => {
     dispatch(getUsers());
     dispatch(managementAction("users"));
+    setOpen(false);
   };
 
   const handleGetProducts = () => {

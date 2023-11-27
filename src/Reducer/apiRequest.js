@@ -5,6 +5,7 @@ import {
   loginSuccess,
   logoutFailed,
   logoutStart,
+  managementAction,
 } from "./userSlice";
 import { uploadFailed, uploadSuccessfull } from "./sellerSlice";
 import { loadSuccessfull } from "./homeProductSlice";
@@ -63,6 +64,35 @@ const confirmProduct = async (productId, statusId, IdAuthor, dispatch) => {
     emitter.emit("EVENT_CONFIRM_DATA");
     console.log(">>>confirm success", res);
   } catch (e) {}
+};
+
+// ADMIN REQUEST
+const editUser = async (data, userId, dispatch) => {
+  let res = await axios.post(`${process.env.REACT_APP_PORT_API}/editUser`, {
+    data,
+    userId,
+  });
+  console.log("edit user:", res);
+  dispatch(managementAction("users"));
+  return res;
+};
+
+const createUser = async (data, dispatch) => {
+  let res = await axios.post(`${process.env.REACT_APP_PORT_API}/createUser`, {
+    data,
+  });
+  console.log("edit user:", res);
+  dispatch(managementAction("users"));
+  return res;
+};
+
+const deleteUser = async (userId, dispatch) => {
+  let res = await axios.post(`${process.env.REACT_APP_PORT_API}/deleteUser`, {
+    userId,
+  });
+  console.log("edit user:", res);
+  dispatch(managementAction("users"));
+  return res;
 };
 
 // SELLER REQUEST
@@ -160,4 +190,7 @@ export {
   addToCart,
   getCart,
   getDeliveryAddress,
+  editUser,
+  createUser,
+  deleteUser,
 };

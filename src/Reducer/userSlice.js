@@ -122,6 +122,74 @@ export const managementAction = createAsyncThunk(
   }
 );
 
+const editUserSlice = createSlice({
+  name: "edit user",
+  initialState: {
+    userId: null,
+    data: {
+      typeRole: "R2",
+    },
+    isLoading: false,
+    error: false,
+  },
+  reducers: {
+    editFullName: (state, action) => {
+      state.data.fullName = action.payload;
+    },
+    editEmail: (state, action) => {
+      state.data.email = action.payload;
+    },
+    editPhoneNumber: (state, action) => {
+      state.data.phoneNumber = action.payload;
+    },
+    editGender: (state, action) => {
+      state.data.gender = action.payload;
+    },
+    editAddress: (state, action) => {
+      state.data.address = action.payload;
+    },
+    editPassword: (state, action) => {
+      state.data.password = action.payload;
+    },
+    editTypeRole: (state, action) => {
+      state.data.typeRole = action.payload;
+    },
+    getUserIdEdit: (state, action) => {
+      state.userId = action.payload;
+    },
+    resetData: (state, action) => {
+      state.data = {};
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(editUserThunk.pending, (state) => {
+      state.isLoading = true;
+      console.log("PENDING");
+    });
+    builder.addCase(editUserThunk.fulfilled, (state) => {
+      state.isLoading = false;
+      console.log("FULFILLED");
+    });
+    builder.addCase(editUserThunk.rejected, (state) => {
+      state.isLoading = false;
+      state.error = true;
+      console.log("REJECTED");
+    });
+  },
+});
+
+export const editUserThunk = createAsyncThunk(
+  "admin/edit-user",
+  async (data, userId) => {
+    let res = await axios.post(`${process.env.REACT_APP_PORT_API}/editUser`, {
+      data,
+      userId,
+    });
+    console.log("edit user:", res);
+    return res;
+  }
+);
+
 export const {
   loginFailed,
   loginStart,
@@ -132,5 +200,16 @@ export const {
 } = authSlice.actions;
 
 export const { getUsers, getProducts, getOrders } = managementSlice.actions;
+export const {
+  editAddress,
+  editEmail,
+  editFullName,
+  editGender,
+  editPhoneNumber,
+  editPassword,
+  editTypeRole,
+  getUserIdEdit,
+  resetData,
+} = editUserSlice.actions;
 
-export { authSlice, managementSlice };
+export { authSlice, managementSlice, editUserSlice };

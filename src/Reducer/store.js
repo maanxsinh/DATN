@@ -1,5 +1,5 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit";
-import { authSlice, managementSlice } from "./userSlice.js";
+import { authSlice, editUserSlice, managementSlice } from "./userSlice.js";
 import { uploadProductSlice } from "./sellerSlice.js";
 import { homeProductSlice } from "./homeProductSlice.js";
 import logger from "redux-logger";
@@ -37,6 +37,7 @@ const store = configureStore({
     getCartSlice: getCartSlice.reducer,
     deliveryAddressSlice: deliveryAddressSlice.reducer,
     manageSlice: managementSlice.reducer,
+    editUserSlice: editUserSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
