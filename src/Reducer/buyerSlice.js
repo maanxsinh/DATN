@@ -95,8 +95,25 @@ export const loadingProductDetail = createAsyncThunk(
   }
 );
 
+const createOrdersSlice = createSlice({
+  name: "create orders",
+  initialState: {
+    ordersArr: [],
+    ProductsArr: [],
+  },
+  reducers: {
+    setOrdersArray: (state, action) => {
+      state.ordersArr = action.payload;
+    },
+    setProductsArr: (state, action) => {
+      state.ProductsArr = action.payload;
+    },
+  },
+});
+
 export const { idProduct } = productDetail.actions;
 export const { getCartStart, getCartSuccess, getCartFailed, getAuthorArray } =
   getCartSlice.actions;
 export const { getDeliveryAddressInf } = deliveryAddressSlice.actions;
-export { productDetail, getCartSlice, deliveryAddressSlice };
+export const { setOrdersArray, setProductsArr } = createOrdersSlice.actions;
+export { productDetail, getCartSlice, deliveryAddressSlice, createOrdersSlice };

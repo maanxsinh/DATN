@@ -39,17 +39,34 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function CreateUser() {
   const [open, setOpen] = React.useState(false);
   const [resetValue, setValue] = React.useState();
+  //   const [email, setEmail] = React.useState("");
+  //   const [fullName, setFullName] = React.useState("");
+  //   const [password, setPassWord] = React.useState("");
+  //   const [gender, setGender] = React.useState("");
+  //   const [address, setAddress] = React.useState("");
+  //   const [phoneNumber, setPhoneNumber] = React.useState("");
+  //   const [typeRole, setTypeRole] = React.useState("");
   const dispatch = useDispatch();
   const data = useSelector((state) => state.editUserSlice.data);
   const userId = useSelector((state) => state.editUserSlice.userId);
 
+  const resetInput = () => {
+    dispatch(editEmail(""));
+    dispatch(editAddress(""));
+    dispatch(editFullName(""));
+    dispatch(editGender(""));
+    dispatch(editPassword(""));
+    dispatch(editPhoneNumber(""));
+    dispatch(editTypeRole("R2"));
+  };
   const handleClickOpen = () => {
     setOpen(true);
+    resetInput();
   };
 
   const handleClose = () => {
     setOpen(false);
-    // dispatch(resetData());
+    dispatch(resetData());
   };
 
   const handleEdit = async () => {
@@ -69,7 +86,7 @@ export default function CreateUser() {
       setOpen(false);
       createUser(data, dispatch);
       console.log("---data:", data);
-      setValue(null);
+      resetInput();
       dispatch(resetData());
       dispatch(openSbTrue());
       dispatch(severitySuccess());
@@ -98,14 +115,18 @@ export default function CreateUser() {
               <Input sx={{ width: "69%" }}>
                 <label for="email">Email</label>
                 <InputChild
-                  value={resetValue}
+                  value={data.email}
                   name="email"
-                  onChange={(e) => dispatch(editEmail(e.target.value))}
+                  onChange={(e) => {
+                    dispatch(editEmail(e.target.value));
+                  }}
                 />
               </Input>
               <Input sx={{ width: "29%" }}>
                 <label for="gender">Gender</label>
-                <Select onChange={(e) => dispatch(editGender(e.target.value))}>
+                <Select
+                  value={data.gender}
+                  onChange={(e) => dispatch(editGender(e.target.value))}>
                   <option value={null}></option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
@@ -118,7 +139,7 @@ export default function CreateUser() {
               <Input sx={{ width: "49%" }}>
                 <label for="fullName">Full Name</label>
                 <InputChild
-                  value={resetValue}
+                  value={data.fullName}
                   name="fullName"
                   onChange={(e) => dispatch(editFullName(e.target.value))}
                 />
@@ -126,7 +147,7 @@ export default function CreateUser() {
               <Input sx={{ width: "49%" }}>
                 <label for="password">Password</label>
                 <InputChild
-                  value={resetValue}
+                  value={data.password}
                   name="password"
                   type="password"
                   onChange={(e) => dispatch(editPassword(e.target.value))}
@@ -136,7 +157,7 @@ export default function CreateUser() {
             <Input>
               <label for="address">Address</label>
               <InputChild
-                value={resetValue}
+                value={data.address}
                 name="address"
                 onChange={(e) => dispatch(editAddress(e.target.value))}
               />
@@ -145,7 +166,7 @@ export default function CreateUser() {
               <Input sx={{ width: "49%" }}>
                 <label for="phoneNumber">Phone Number</label>
                 <InputChild
-                  value={resetValue}
+                  value={data.phoneNumber}
                   name="phoneNumber"
                   onChange={(e) => dispatch(editPhoneNumber(e.target.value))}
                 />
@@ -153,8 +174,10 @@ export default function CreateUser() {
               <Input sx={{ width: "49%" }}>
                 <label for="typeRole">Role</label>
                 <Select
+                  value={data.typeRole}
                   onChange={(e) => dispatch(editTypeRole(e.target.value))}
                   sx={{ width: "230px" }}>
+                  <option value={null}></option>
                   <option value="R2">Buyer/Seller</option>
                   <option value="R1">Admin</option>
                 </Select>

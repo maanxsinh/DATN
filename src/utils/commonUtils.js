@@ -1,3 +1,10 @@
+const {
+  openSbTrue,
+  severityWarning,
+  severitySuccess,
+  setSnackbarMessage,
+} = require("../Reducer/snackbarSlice");
+
 const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -53,9 +60,20 @@ const toVnd = (price) => {
   return priceConvert;
 };
 
+const setSnackbar = (severity, message, dispatch) => {
+  dispatch(openSbTrue());
+  if (severity === "warning") {
+    dispatch(severityWarning());
+  } else {
+    dispatch(severitySuccess());
+  }
+  dispatch(setSnackbarMessage(message));
+};
+
 module.exports = {
   getBase64: getBase64,
   bufferToBase64: bufferToBase64,
   createConversation: createConversation,
   toVnd: toVnd,
+  setSnackbar: setSnackbar,
 };

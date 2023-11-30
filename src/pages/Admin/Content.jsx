@@ -3,7 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import UsersManage from "./Manage/UsersManage";
 import Manage from "../../components/Manage";
-import OrdersManage from "./Manage/OrdersManage";
+import OrdersManage from "../../components/Manage/OrdersManage";
 
 const Content = () => {
   const manage = useSelector((state) => state.manageSlice.manage);

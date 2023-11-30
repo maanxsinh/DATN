@@ -98,12 +98,13 @@ const managementSlice = createSlice({
 export const managementAction = createAsyncThunk(
   //action name
   "admin/management",
-  async (manage, dispatch) => {
+  async ({ manage, role, userId, statusName }) => {
     if (manage === "users") {
       let res = await axios.get(
         `${process.env.REACT_APP_PORT_API}/getUsers`,
         {}
       );
+      console.log("---check res:", res);
       // let res = "abc";
       return res;
     } else if (manage === "products") {
@@ -113,10 +114,21 @@ export const managementAction = createAsyncThunk(
       );
       return res;
     } else if (manage === "orders") {
-      let res = await axios.get(
-        `${process.env.REACT_APP_PORT_API}/getOrders`,
-        {}
-      );
+      console.log(">>>role:", role);
+      let res = await axios.get(`${process.env.REACT_APP_PORT_API}/getOrders`, {
+        params: { role, userId, statusName },
+      });
+      console.log(">>>orders:", res.data.data);
+      const arr = res.data.data;
+      if (arr && arr.length > 0) {
+        arr.map((item) => {
+          item.Product.imageToBase64 = new Buffer(
+            item.Product.image.data,
+            "base64"
+          ).toString("binary");
+          return item;
+        });
+      }
       return res;
     }
   }

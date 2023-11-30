@@ -5,6 +5,7 @@ import { homeProductSlice } from "./homeProductSlice.js";
 import logger from "redux-logger";
 import { messageSlice } from "./messageSlice.js";
 import {
+  createOrdersSlice,
   deliveryAddressSlice,
   getCartSlice,
   productDetail,
@@ -38,6 +39,7 @@ const store = configureStore({
     deliveryAddressSlice: deliveryAddressSlice.reducer,
     manageSlice: managementSlice.reducer,
     editUserSlice: editUserSlice.reducer,
+    createOrdersSlice: createOrdersSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

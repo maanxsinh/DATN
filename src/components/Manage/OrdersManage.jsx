@@ -21,13 +21,17 @@ import { emitter } from "../../utils/emitter";
 import SnackbarComponent from "../Snackbar";
 import { openSbTrue, setSnackbarMessage } from "../../Reducer/snackbarSlice";
 import CircularProgress from "@mui/material/CircularProgress";
+import { toVnd } from "../../utils/commonUtils";
+import { managementAction } from "../../Reducer/userSlice";
+import { MdDone } from "react-icons/md";
 
-const Manage = () => {
-  const [sort, setSort] = useState("all");
+const OrdersManage = () => {
+  const [sort, setSort] = useState("new");
   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(null);
   const navigate = useNavigate();
   const product = useSelector((state) => state.loadProductSlice.product);
+  const orders = useSelector((state) => state.manageSlice.data);
   const user = useSelector((state) => state.auth.login.currentUser);
   const isLoading = useSelector((state) => state.loadProductSlice.isLoading);
   const snackbarMessage = useSelector(
@@ -45,66 +49,51 @@ const Manage = () => {
     // if (!currentUser) {
     //   navigate("/login");
     // }
-    const fetchProduct = async () => {
-      const statusId = null;
-      console.log(">>> current USER:", user.data);
-      if (user.data.typeRole === "R1") {
-        await loadingProduct(null, null, dispatch);
-        console.log(">>> R1");
-      } else {
-        const IdAuthor = user.data.id;
-        console.log(">>> R2");
-        await loadingProduct(null, IdAuthor, dispatch);
-      }
-    };
-    fetchProduct();
-    console.log(">>> product:", product);
+    // const fetchProduct = async () => {
+    //   const statusId = null;
+    //   console.log(">>> current USER:", user.data);
+    //   if (user.data.typeRole === "R1") {
+    //     await loadingProduct(null, null, dispatch);
+    //     console.log(">>> R1");
+    //   } else {
+    //     const IdAuthor = user.data.id;
+    //     console.log(">>> R2");
+    //     await loadingProduct(null, IdAuthor, dispatch);
+    //   }
+    // };
+    // fetchProduct();
+    // console.log(">>> product:", product);
   }, []);
 
-  const handleLoadConfirmProduct = async () => {
-    setSort("confirm");
+  const handleLoadOrders = (sort, manage, role, statusName) => {
+    setSort(sort);
     setSelected([]);
-    const statusId = "CONFIRMED";
     if (user.data.typeRole === "R1") {
-      await loadingProduct(statusId, null, dispatch);
+      const userId = null;
+      dispatch(managementAction({ manage, role, userId, statusName }));
       console.log(">>> R1");
     } else {
-      const IdAuthor = user.data.id;
+      const userId = user.data.id;
       console.log(">>> R2");
-      await loadingProduct(statusId, IdAuthor, dispatch);
+      dispatch(managementAction({ manage, role, userId, statusName }));
     }
+  };
+
+  const handleLoadConfirmProduct = async () => {
+    handleLoadOrders("confirm", "orders", "admin", "CONFIRMED");
   };
   const handleLoadNewProduct = async () => {
-    setSort("new");
-    setSelected([]);
-    const statusId = "NEW";
-    if (user.data.typeRole === "R1") {
-      await loadingProduct(statusId, null, dispatch);
-      console.log(">>> R1");
-    } else {
-      const IdAuthor = user.data.id;
-      console.log(">>> R2");
-      await loadingProduct(statusId, IdAuthor, dispatch);
-    }
+    handleLoadOrders("new", "orders", "admin", "NEW");
   };
-  const handleLoadAllProduct = async () => {
-    setSort("all");
-    setSelected([]);
-    if (user.data.typeRole === "R1") {
-      await loadingProduct(null, null, dispatch);
-      console.log(">>> R1");
-    } else {
-      const IdAuthor = user.data.id;
-      console.log(">>> R2");
-      await loadingProduct(null, IdAuthor, dispatch);
-    }
+  const handleLoadDoneProduct = async () => {
+    handleLoadOrders("complete", "orders", "admin", "COMPLETED");
   };
 
   const handleChangeAll = (e) => {
     console.log(">>> value:", e.target.value, ">>>array:", selected);
     if (e.target.value === "0") {
       // if true
-      const arrayIDitem = product.map((item) => item.id);
+      const arrayIDitem = orders.map((item) => item.productId);
       setSelected(arrayIDitem); // select all
     } else {
       // if false
@@ -174,11 +163,6 @@ const Manage = () => {
         <Box sx={{ width: "80vw", margin: "0 0 80px 0" }}>
           <Sort>
             <Typo16
-              onClick={() => handleLoadAllProduct()}
-              sx={sort === "all" && { borderBottom: "4px solid black" }}>
-              All
-            </Typo16>
-            <Typo16
               onClick={() => handleLoadNewProduct()}
               sx={sort === "new" && { borderBottom: "4px solid black" }}>
               New
@@ -188,8 +172,13 @@ const Manage = () => {
               sx={sort === "confirm" && { borderBottom: "4px solid black" }}>
               Confirmed
             </Typo16>
+            <Typo16
+              onClick={() => handleLoadDoneProduct()}
+              sx={sort === "complete" && { borderBottom: "4px solid black" }}>
+              Completed
+            </Typo16>
             <Typo20>
-              Selected:&nbsp;{selected.length}/{product.length}
+              Selected:&nbsp;{selected.length}/{orders?.length}
             </Typo20>
           </Sort>
           <Box
@@ -211,27 +200,27 @@ const Manage = () => {
                 </Head>
               </Grid>
               <Grid xs={3}>
-                <Head>Name</Head>
-              </Grid>
-              <Grid xs={1.5}>
-                <Head>Sort</Head>
+                <Head>Product</Head>
               </Grid>
               <Grid xs={2}>
-                <Head>Price</Head>
+                <Head>Seller</Head>
+              </Grid>
+              <Grid xs={2}>
+                <Head>Buyer</Head>
+              </Grid>
+              <Grid xs={2}>
+                <Head>Order's date</Head>
               </Grid>
               <Grid xs={1}>
-                <Head>Warehouse</Head>
-              </Grid>
-              <Grid xs={2.5}>
-                <Head>Description</Head>
+                <Head>Status</Head>
               </Grid>
               <Grid xs={1.5}>
                 <Head>Actions</Head>
               </Grid>
             </Grid>
           </Box>
-          {!isLoading && product && product.length > 0 ? (
-            product.map((item) => {
+          {!isLoading && orders && orders.length > 0 ? (
+            orders.map((item) => {
               return (
                 <Box
                   key={item.id}
@@ -246,8 +235,8 @@ const Manage = () => {
                         <Checkbox
                           {...label}
                           color="default"
-                          value={item.id}
-                          checked={selected.includes(item.id)}
+                          value={item.productId}
+                          checked={selected.includes(item.productId)}
                           onChange={(e) => {
                             handleChooseProduct(e);
                             console.log(
@@ -264,40 +253,45 @@ const Manage = () => {
                       <Item>
                         <img
                           alt="hinhanh"
-                          src={item.imageToBase64}
+                          src={item.Product.imageToBase64}
                           style={{ height: "56px", witdh: "56px" }}
                         />
-                        {item.name}
+                        <Box>
+                          <Item sx={{ height: "30px", fontWeight: 500 }}>
+                            {item.Product.name}
+                          </Item>
+                          <Item>{toVnd(item.Product.price)}</Item>
+                        </Box>
                       </Item>
                     </Grid>
-                    <Grid xs={1.5}>
-                      <Item>iPhone</Item>
+                    <Grid xs={2}>
+                      <Item>{item.Product.User.fullName}</Item>
                     </Grid>
                     <Grid xs={2}>
-                      <Item>{item.price}</Item>
+                      <Item>{item.User.fullName}</Item>
+                    </Grid>
+                    <Grid xs={2}>
+                      <Item>{item.createdAt}</Item>
                     </Grid>
                     <Grid xs={1}>
-                      <Item>1</Item>
-                    </Grid>
-                    <Grid xs={2.5}>
-                      <Item sx={{ overflow: "auto" }}>{item.description}</Item>
+                      <Item sx={{ overflow: "auto" }}>{item.statusName}</Item>
                     </Grid>
                     <Grid xs={1.5}>
                       <Item sx={{ flexDirection: "column" }}>
-                        {item.statusId === "NEW" && (
+                        {item.statusName === "NEW" && (
                           <Action>
                             <AiFillSafetyCertificate />
                             &nbsp;&nbsp;Comfirm
                           </Action>
                         )}
-                        <Action>
+                        {/* <Action>
                           <BsFillTrash3Fill />
                           &nbsp;&nbsp;Delete
                         </Action>
                         <Action>
                           <AiFillEdit />
                           &nbsp;&nbsp;Edit
-                        </Action>
+                        </Action> */}
                       </Item>
                     </Grid>
                   </Grid>
@@ -311,12 +305,12 @@ const Manage = () => {
                 justifyContent: "center",
                 margin: "60px",
               }}>
-              <CircularProgress />
+              <Typo16>No Product</Typo16>
             </Box>
           )}
           {selected.length > 0 && (
             <Actions>
-              {sort !== "confirm" && (
+              {sort === "new" && user.data.id === "R1" && (
                 <ButtonAction
                   sx={{ backgroundColor: "var(--pinky)", marginRight: "20px" }}
                   onClick={() => {
@@ -327,16 +321,17 @@ const Manage = () => {
                   &nbsp;&nbsp;CONFIRM
                 </ButtonAction>
               )}
-
-              <ButtonAction
-                sx={{ backgroundColor: "black" }}
-                onClick={() => {
-                  setOpen(true);
-                  setAction("delete");
-                }}>
-                <BsFillTrash3Fill />
-                &nbsp;&nbsp;DELETE
-              </ButtonAction>
+              {sort === "confirm" && user.data.typeRole === "R1" && (
+                <ButtonAction
+                  sx={{ backgroundColor: "black" }}
+                  onClick={() => {
+                    setOpen(true);
+                    setAction("delete");
+                  }}>
+                  <MdDone />
+                  &nbsp;&nbsp;COMPLETE ORDER
+                </ButtonAction>
+              )}
             </Actions>
           )}
 
@@ -366,7 +361,7 @@ const Manage = () => {
   );
 };
 
-export default Manage;
+export default OrdersManage;
 
 const Item = styled(Box)(({ theme }) => ({
   fontSize: "14px",

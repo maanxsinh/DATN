@@ -38,18 +38,24 @@ export default function Snackbar() {
 
   const handleGetUsers = async () => {
     dispatch(getUsers());
-    dispatch(managementAction("users"));
+    const manage = "users";
+    dispatch(managementAction({ manage }));
     setOpen(false);
   };
 
   const handleGetProducts = () => {
     dispatch(getProducts());
-    dispatch(managementAction("products"));
+    const manage = "products";
+    dispatch(managementAction({ manage }));
   };
 
   const handleGetOrders = () => {
     dispatch(getOrders());
-    dispatch(managementAction("orders"));
+    const manage = "orders";
+    const role = "admin";
+    const statusName = "NEW";
+    const userId = null;
+    dispatch(managementAction({ manage, role, userId, statusName }));
   };
 
   return (

@@ -12,9 +12,15 @@ import Checkbox from "@mui/material/Checkbox";
 import { MdCancel } from "react-icons/md";
 import { AiTwotoneShop } from "react-icons/ai";
 import DeliveryAdress from "../../components/DeliveryAdress";
-import { getCart, getDeliveryAddress } from "../../Reducer/apiRequest";
+import {
+  createOrders,
+  getCart,
+  getDeliveryAddress,
+} from "../../Reducer/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
-import { toVnd } from "../../utils/commonUtils";
+import { setSnackbar, toVnd } from "../../utils/commonUtils";
+import { setOrdersArray, setProductsArr } from "../../Reducer/buyerSlice";
+import SnackbarComponent from "../../components/Snackbar";
 
 const Cart = () => {
   let x = 50000000;
@@ -22,10 +28,13 @@ const Cart = () => {
   // x = x.toLocaleString("vi", { style: "currency", currency: "VND" });
   y = y.toLocaleString("vi", { style: "currency", currency: "VND" });
   let z = x + y;
+  const [sellerId, setSellerId] = useState(null);
   const [shipping, setShipping] = React.useState("");
   const [selected, setSelected] = useState([]);
+  const [ordersArr, setOrdersArr] = useState([]);
   const [sumPrice, setSumPrice] = useState(0);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.login.currentUser);
   const cart = useSelector((state) => state.getCartSlice.cart);
   const authorArr = useSelector((state) => state.getCartSlice.authorArr);
   const infAddress = useSelector(
@@ -40,8 +49,15 @@ const Cart = () => {
     getProductInCart();
   }, []);
 
-  const handleTestApi = () => {
-    console.log(">>>infAddress:", infAddress);
+  const createOrdersArray = (buyerId, productId, sellerId, statusName) => {
+    let item = {
+      buyerId: buyerId,
+      productId: productId,
+      sellerId: sellerId,
+      statusName: "NEW",
+    };
+
+    setOrdersArr([...ordersArr, item]);
   };
 
   const handleChange = (event) => {
@@ -55,37 +71,67 @@ const Cart = () => {
       const arrayIDitem = cart.map((item) => item.Product.id);
       console.log(">>>arrayIDitem:", arrayIDitem);
       setSelected(arrayIDitem); // select all
+
+      //calcu price
       const arrPrice = cart.map((item) => {
         return item.Product.price;
       });
+      setOrdersArr(
+        cart.map((item) => {
+          return {
+            buyerId: item.ownCartId,
+            productId: item.Product.id,
+            sellerId: item.Product.IdAuthor,
+            statusName: "NEW",
+          };
+        })
+      );
       const sum = arrPrice.reduce((partialSum, a) => partialSum + a, 0);
       setSumPrice(sum);
-      console.log(">>>arrPrice:", sum);
     } else {
       // if false
       setSelected([]); // unselect all
       setSumPrice(0);
+      setOrdersArr([]);
     }
     console.log(">>> value:", typeof e.target.value);
   };
 
   const handleChooseProduct = (e) => {
     let value = parseInt(e.target.value, 10);
-    let price = parseInt(e.target.name, 10);
+    let name = e.target.name.split(",");
+    let price = parseInt(name[0], 10);
+    let sellerId = parseInt(name[1], 10);
     const isExist = selected.includes(value);
-    console.log(">>>isExist:", typeof price);
-    console.log(">>>isExist2:", typeof value);
     if (!isExist) {
       // if true
       setSelected([...selected, value]); // add to selected
       setSumPrice(sumPrice + price);
-      console.log(">>>TRUE:", sumPrice);
+
+      createOrdersArray(user.data.id, value, sellerId);
     } else {
       // if false
       setSelected(selected.filter((item) => item !== value));
+      setOrdersArr(ordersArr.filter((item) => item.productId !== value));
       setSumPrice(sumPrice - price); // remove from selected
-      console.log(">>>FALSE:", selected);
     }
+  };
+
+  const handleCheckOut = async () => {
+    dispatch(setOrdersArray(ordersArr));
+    dispatch(setProductsArr(selected));
+    if (!infAddress) {
+      setSnackbar("warning", "Please fill shipping information!", dispatch);
+    } else if (selected.length === 0) {
+      setSnackbar("warning", "No product is chosen", dispatch);
+    } else {
+      setSnackbar("success", "Orders successfull", dispatch);
+      await createOrders(ordersArr, selected);
+      await getCart(user.data.id, dispatch);
+    }
+  };
+  const handleTestApi = () => {
+    console.log("---arrOrders:", ordersArr);
   };
 
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
@@ -93,6 +139,7 @@ const Cart = () => {
   if (cart.length > 0 && authorArr.length > 0) {
     return (
       <Box sx={{ backgroundColor: "rgba(0,0,0,.06)", height: "2000px" }}>
+        <SnackbarComponent />
         <Box
           sx={{
             width: "100vw",
@@ -123,7 +170,9 @@ const Cart = () => {
                   &nbsp;{toVnd(sumPrice)}
                 </Typography>{" "}
               </Typo15>
-              <ButtonCheckout>Check out</ButtonCheckout>
+              <ButtonCheckout onClick={() => handleCheckOut()}>
+                Check out
+              </ButtonCheckout>
             </CheckoutItems>
           </Total>
         </Box>
@@ -150,10 +199,14 @@ const Cart = () => {
               &nbsp;&nbsp;Delivery Address
             </Box>
             <Box sx={{ display: "flex" }}>
-              <Typo15 sx={{ fontWeight: 500 }}>
-                {infAddress.fullName}&nbsp;&nbsp;({infAddress.phoneNumber})
-              </Typo15>
-              <Typo15>{infAddress.address}</Typo15>
+              {infAddress && (
+                <>
+                  <Typo15 sx={{ fontWeight: 500 }}>
+                    {infAddress.fullName}&nbsp;&nbsp;({infAddress.phoneNumber})
+                  </Typo15>
+                  <Typo15>{infAddress.address}</Typo15>
+                </>
+              )}
 
               <DeliveryAdress />
             </Box>
@@ -207,9 +260,14 @@ const Cart = () => {
                                 {...label}
                                 color="error"
                                 value={itemPro.Product.id}
-                                name={itemPro.Product.price}
+                                // name={itemPro.Product.price}
+                                name={[
+                                  itemPro.Product.price,
+                                  itemPro.Product.IdAuthor,
+                                ]}
                                 checked={selected.includes(itemPro.Product.id)}
                                 onChange={(e) => {
+                                  setSellerId(itemPro.Product.IdAuthor);
                                   handleChooseProduct(e);
                                 }}
                               />
@@ -292,6 +350,8 @@ const Cart = () => {
         <button onClick={() => handleTestApi()}>Test api</button>
       </Box>
     );
+  } else {
+    return <Box>No Product In Your Cart</Box>;
   }
 };
 

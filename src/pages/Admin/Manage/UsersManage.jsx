@@ -32,6 +32,8 @@ const UsersManage = () => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const users = useSelector((state) => state.manageSlice.data);
+  // console.log("---data:", data);
+  // const users = data;
   const isLoading = useSelector((state) => state.manageSlice.isLoading);
   const userId = useSelector((state) => state.editUserSlice.userId);
   const snackbarMessage = useSelector(
@@ -230,7 +232,7 @@ const UsersManage = () => {
             </DialogActions>
           </Dialog>
           {/* <button onClick={() => handleTest()}>TEST</button> */}
-          <SnackbarComponent />
+          {/* <SnackbarComponent /> */}
         </Box>
       </Box>
     </>

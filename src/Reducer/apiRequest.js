@@ -72,8 +72,9 @@ const editUser = async (data, userId, dispatch) => {
     data,
     userId,
   });
+  const manage = "users";
   console.log("edit user:", res);
-  dispatch(managementAction("users"));
+  dispatch(managementAction({ manage }));
   return res;
 };
 
@@ -82,7 +83,8 @@ const createUser = async (data, dispatch) => {
     data,
   });
   console.log("edit user:", res);
-  dispatch(managementAction("users"));
+  const manage = "users";
+  dispatch(managementAction({ manage }));
   return res;
 };
 
@@ -91,7 +93,8 @@ const deleteUser = async (userId, dispatch) => {
     userId,
   });
   console.log("edit user:", res);
-  dispatch(managementAction("users"));
+  const manage = "users";
+  dispatch(managementAction({ manage }));
   return res;
 };
 
@@ -144,8 +147,8 @@ const getCart = async (ownCartId, dispatch) => {
     let res = await axios.get(`${process.env.REACT_APP_PORT_API}/getCart`, {
       params: { ownCartId },
     });
-    dispatch(getCartSuccess(res.data.cart));
-    dispatch(getAuthorArray(res.data.authorArray));
+    dispatch(getCartSuccess(res.data.data));
+    dispatch(getAuthorArray(res.data.authorArr));
     console.log(">>>>res:", res.data);
   } catch (e) {
     dispatch(getCartFailed());
@@ -155,12 +158,24 @@ const getCart = async (ownCartId, dispatch) => {
 const getDeliveryAddress = async (userId, dispatch) => {
   try {
     let res = await axios.get(
-      `${process.env.REACT_APP_PORT_API}/getAddressDelivery`,
+      `${process.env.REACT_APP_PORT_API}/getDeliveryAddress`,
       {
         params: { userId },
       }
     );
-    dispatch(getDeliveryAddressInf(res.data.inf));
+    dispatch(getDeliveryAddressInf(res.data.data));
+    console.log("---delivery address:", res.data.data);
+  } catch (e) {}
+};
+
+const createOrders = async (data, arrProducts, dispatch) => {
+  try {
+    await axios.post(`${process.env.REACT_APP_PORT_API}/createOrders`, {
+      data,
+    });
+    await axios.post(`${process.env.REACT_APP_PORT_API}/setOrdered`, {
+      arrProducts,
+    });
   } catch (e) {}
 };
 
@@ -193,4 +208,5 @@ export {
   editUser,
   createUser,
   deleteUser,
+  createOrders,
 };
