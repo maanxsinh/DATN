@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import Cart from "./pages/Cart";
 import TheMap from "./components/GgMap";
 import AdminManage from "./pages/Admin";
+import Management from "./pages/Users/Management";
 
 const theme = createTheme({
   typography: {
@@ -29,7 +30,7 @@ const App = () => {
         <Route path="/productdetail/:id" element={<ProductDetail />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/mess" element={<Message />} />
-        <Route path="/manage" element={<Manage />} />
+        <Route path="/manage" element={<Management />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/map" element={<TheMap />} />
         <Route path="/admin" element={<AdminManage />} />

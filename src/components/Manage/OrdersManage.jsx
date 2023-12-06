@@ -7,6 +7,7 @@ import {
   deleteProduct,
   loadingProduct,
   confirmProduct,
+  getDeliveryAddress,
 } from "../../Reducer/apiRequest";
 import { AiFillEdit } from "react-icons/ai";
 import { BsFillTrash3Fill } from "react-icons/bs";
@@ -21,11 +22,12 @@ import { emitter } from "../../utils/emitter";
 import SnackbarComponent from "../Snackbar";
 import { openSbTrue, setSnackbarMessage } from "../../Reducer/snackbarSlice";
 import CircularProgress from "@mui/material/CircularProgress";
-import { toVnd } from "../../utils/commonUtils";
+import { formatDate, toVnd } from "../../utils/commonUtils";
 import { managementAction } from "../../Reducer/userSlice";
 import { MdDone } from "react-icons/md";
 
 const OrdersManage = () => {
+  const roleManageOrders = useSelector((state) => state.manageSlice.role);
   const [sort, setSort] = useState("new");
   const [selected, setSelected] = useState([]);
   const [action, setAction] = useState(null);
@@ -63,7 +65,8 @@ const OrdersManage = () => {
     // };
     // fetchProduct();
     // console.log(">>> product:", product);
-  }, []);
+    handleLoadOrders("new", "orders", roleManageOrders, "NEW");
+  }, [roleManageOrders]);
 
   const handleLoadOrders = (sort, manage, role, statusName) => {
     setSort(sort);
@@ -74,19 +77,19 @@ const OrdersManage = () => {
       console.log(">>> R1");
     } else {
       const userId = user.data.id;
-      console.log(">>> R2");
+      console.log(">>> R2:", user.data.id);
       dispatch(managementAction({ manage, role, userId, statusName }));
     }
   };
 
   const handleLoadConfirmProduct = async () => {
-    handleLoadOrders("confirm", "orders", "admin", "CONFIRMED");
+    handleLoadOrders("confirm", "orders", roleManageOrders, "CONFIRMED");
   };
   const handleLoadNewProduct = async () => {
-    handleLoadOrders("new", "orders", "admin", "NEW");
+    handleLoadOrders("new", "orders", roleManageOrders, "NEW");
   };
   const handleLoadDoneProduct = async () => {
-    handleLoadOrders("complete", "orders", "admin", "COMPLETED");
+    handleLoadOrders("complete", "orders", roleManageOrders, "COMPLETED");
   };
 
   const handleChangeAll = (e) => {
@@ -149,7 +152,6 @@ const OrdersManage = () => {
 
   const handleTest = () => {
     console.log(">>> array Product:", selected);
-    console.log(">>>action:", action, ">>>typeof action", typeof action);
     // console.log(">>> check product:", product);
     // console.log(">>>name:", name, ">>>typeof name:", typeof name);
   };
@@ -157,7 +159,7 @@ const OrdersManage = () => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   return (
     <>
-      {user.data.typeRole !== "R1" && <Header />}
+      {/* {user.data.typeRole !== "R1" && <Header />} */}
 
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Box sx={{ width: "80vw", margin: "0 0 80px 0" }}>
@@ -170,7 +172,7 @@ const OrdersManage = () => {
             <Typo16
               onClick={() => handleLoadConfirmProduct()}
               sx={sort === "confirm" && { borderBottom: "4px solid black" }}>
-              Confirmed
+              Shipping
             </Typo16>
             <Typo16
               onClick={() => handleLoadDoneProduct()}
@@ -211,11 +213,8 @@ const OrdersManage = () => {
               <Grid xs={2}>
                 <Head>Order's date</Head>
               </Grid>
-              <Grid xs={1}>
-                <Head>Status</Head>
-              </Grid>
-              <Grid xs={1.5}>
-                <Head>Actions</Head>
+              <Grid xs={2.5}>
+                <Head>Delivery Address</Head>
               </Grid>
             </Grid>
           </Box>
@@ -253,7 +252,7 @@ const OrdersManage = () => {
                       <Item>
                         <img
                           alt="hinhanh"
-                          src={item.Product.imageToBase64}
+                          src={item.Product?.imageToBase64}
                           style={{ height: "56px", witdh: "56px" }}
                         />
                         <Box>
@@ -273,10 +272,18 @@ const OrdersManage = () => {
                     <Grid xs={2}>
                       <Item>{item.createdAt}</Item>
                     </Grid>
-                    <Grid xs={1}>
-                      <Item sx={{ overflow: "auto" }}>{item.statusName}</Item>
+                    <Grid xs={2.5}>
+                      <Item sx={{ overflow: "auto" }}>
+                        {item.User.email}
+                        <br />
+                        <br />
+                        {item.User.phoneNumber}
+                        <br />
+                        <br />
+                        {item.User.address}
+                      </Item>
                     </Grid>
-                    <Grid xs={1.5}>
+                    {/* <Grid xs={1.5}>
                       <Item sx={{ flexDirection: "column" }}>
                         {item.statusName === "NEW" && (
                           <Action>
@@ -284,16 +291,16 @@ const OrdersManage = () => {
                             &nbsp;&nbsp;Comfirm
                           </Action>
                         )}
-                        {/* <Action>
+                        <Action>
                           <BsFillTrash3Fill />
                           &nbsp;&nbsp;Delete
                         </Action>
                         <Action>
                           <AiFillEdit />
                           &nbsp;&nbsp;Edit
-                        </Action> */}
+                        </Action>
                       </Item>
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </Box>
               );
@@ -310,7 +317,7 @@ const OrdersManage = () => {
           )}
           {selected.length > 0 && (
             <Actions>
-              {sort === "new" && user.data.id === "R1" && (
+              {sort === "new" && roleManageOrders === "seller" && (
                 <ButtonAction
                   sx={{ backgroundColor: "var(--pinky)", marginRight: "20px" }}
                   onClick={() => {
@@ -321,12 +328,23 @@ const OrdersManage = () => {
                   &nbsp;&nbsp;CONFIRM
                 </ButtonAction>
               )}
+              {sort === "new" && roleManageOrders === "buyer" && (
+                <ButtonAction
+                  sx={{ backgroundColor: "black", marginRight: "20px" }}
+                  onClick={() => {
+                    setOpen(true);
+                    setAction("cancel");
+                  }}>
+                  <AiFillSafetyCertificate />
+                  &nbsp;&nbsp;CANCEL
+                </ButtonAction>
+              )}
               {sort === "confirm" && user.data.typeRole === "R1" && (
                 <ButtonAction
                   sx={{ backgroundColor: "black" }}
                   onClick={() => {
                     setOpen(true);
-                    setAction("delete");
+                    setAction("complete");
                   }}>
                   <MdDone />
                   &nbsp;&nbsp;COMPLETE ORDER
@@ -341,9 +359,9 @@ const OrdersManage = () => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description">
             <DialogTitle id="alert-dialog-title">
-              {action === "confirm"
-                ? "Do you want to confirmed?"
-                : "Do you want to delete?"}
+              {action === "confirm" && "Do you want to confirm?"}
+              {action === "cancel" && "Do you want to cancel?"}
+              {action === "complete" && "Do you want to complete?"}
             </DialogTitle>
 
             <DialogActions>
@@ -353,7 +371,7 @@ const OrdersManage = () => {
               </Button>
             </DialogActions>
           </Dialog>
-          {/* <button onClick={() => handleTest()}>TEST</button> */}
+          <button onClick={() => handleTest()}>TEST</button>
           <SnackbarComponent />
         </Box>
       </Box>

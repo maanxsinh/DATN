@@ -7,7 +7,7 @@ import { BsCartPlus } from "react-icons/bs";
 import Header from "../../components/Header";
 import { AiOutlineMessage } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import commonUtils from "../../utils/commonUtils";
+import commonUtils, { toVnd } from "../../utils/commonUtils";
 import { useNavigate } from "react-router-dom";
 import Message from "../../components/Message";
 import axios from "axios";
@@ -52,6 +52,7 @@ const ProductDetail = () => {
       authorName: data.User.fullName,
       ownCartId: currentUser.data.id,
       productId: data.id,
+      statusName: "IN CART",
     };
     console.log(">>>dataProduct:", dataProduct);
     dispatch(setProductToAdd(dataProduct));
@@ -141,7 +142,7 @@ const ProductDetail = () => {
             <Span13>★★★★★</Span13>
             <Span13 sx={{ marginLeft: "10px" }}>1 review</Span13>
             <Typo16 sx={{ marginTop: "75px", fontWeight: "500" }} gutterBottom>
-              {data.price}
+              {toVnd(data.price)}
             </Typo16>
             <Typo16 sx={{ marginTop: "40px" }} gutterBottom>
               MODEL

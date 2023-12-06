@@ -13,7 +13,7 @@ import QuickSec from "./QuickSec";
 import { Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logoutSuccess } from "../../Reducer/userSlice";
+import { logoutSuccess, setRoleBuyer } from "../../Reducer/userSlice";
 import Badge from "@mui/material/Badge";
 import MailIcon from "@mui/icons-material/Mail";
 
@@ -129,7 +129,13 @@ const Header = () => {
             ) : (
               <div className="pop-up">
                 <div>My account</div>
-                <div onClick={() => navigate("/manage")}>Management</div>
+                <div
+                  onClick={() => {
+                    dispatch(setRoleBuyer());
+                    navigate("/manage");
+                  }}>
+                  Management
+                </div>
                 <div
                   onClick={() => {
                     dispatch(logoutSuccess());

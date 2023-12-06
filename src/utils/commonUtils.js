@@ -5,6 +5,8 @@ const {
   setSnackbarMessage,
 } = require("../Reducer/snackbarSlice");
 
+const moment = require("moment");
+
 const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -70,10 +72,20 @@ const setSnackbar = (severity, message, dispatch) => {
   dispatch(setSnackbarMessage(message));
 };
 
+const formatDate = (myDate) => {
+  let str = "2018-07-30T15:01:13Z";
+  let date = moment(myDate);
+  let result = date.format("1111");
+  return result;
+
+  // console.log("---data format is:", date.format("llll"));
+};
+
 module.exports = {
   getBase64: getBase64,
   bufferToBase64: bufferToBase64,
   createConversation: createConversation,
   toVnd: toVnd,
   setSnackbar: setSnackbar,
+  formatDate: formatDate,
 };

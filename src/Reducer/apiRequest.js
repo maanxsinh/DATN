@@ -122,8 +122,8 @@ const isProductExist = async (data) => {
         params: { data },
       }
     );
-    console.log("...check product exist:", res.data.isExist);
-    if (!res.data.isExist) {
+    console.log("...check product exist:", res.data.data);
+    if (res.data.data === null) {
       let res = await addToCart(data);
       return "success";
     } else {
@@ -165,6 +165,7 @@ const getDeliveryAddress = async (userId, dispatch) => {
     );
     dispatch(getDeliveryAddressInf(res.data.data));
     console.log("---delivery address:", res.data.data);
+    return res.data.data;
   } catch (e) {}
 };
 
@@ -176,6 +177,44 @@ const createOrders = async (data, arrProducts, dispatch) => {
     await axios.post(`${process.env.REACT_APP_PORT_API}/setOrdered`, {
       arrProducts,
     });
+  } catch (e) {}
+};
+
+const createDeliveryAddress = async (userId, data) => {
+  try {
+    let res = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/createDeliveryAddress`,
+      {
+        userId,
+        data,
+      }
+    );
+    console.log("---create delivery address result:", res);
+  } catch (e) {}
+};
+
+const updateDeliveryAddress = async (userId, data) => {
+  try {
+    let res = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/updateDeliveryAddress`,
+      {
+        userId,
+        data,
+      }
+    );
+    console.log("---create delivery address result:", res);
+  } catch (e) {}
+};
+
+const cancelOrders = async (productId) => {
+  try {
+    let res = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/cancelOrders`,
+      {
+        productId,
+      }
+    );
+    console.log("---cancel orders:", res);
   } catch (e) {}
 };
 
@@ -209,4 +248,7 @@ export {
   createUser,
   deleteUser,
   createOrders,
+  createDeliveryAddress,
+  updateDeliveryAddress,
+  cancelOrders,
 };

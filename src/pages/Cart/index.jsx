@@ -19,8 +19,13 @@ import {
 } from "../../Reducer/apiRequest";
 import { useDispatch, useSelector } from "react-redux";
 import { setSnackbar, toVnd } from "../../utils/commonUtils";
-import { setOrdersArray, setProductsArr } from "../../Reducer/buyerSlice";
+import {
+  setOrdersArray,
+  setProductsArr,
+  setUserId,
+} from "../../Reducer/buyerSlice";
 import SnackbarComponent from "../../components/Snackbar";
+import Header from "../../components/Header";
 
 const Cart = () => {
   let x = 50000000;
@@ -127,6 +132,8 @@ const Cart = () => {
     } else {
       setSnackbar("success", "Orders successfull", dispatch);
       await createOrders(ordersArr, selected);
+      setSelected([]);
+      setSumPrice(0);
       await getCart(user.data.id, dispatch);
     }
   };
@@ -138,217 +145,227 @@ const Cart = () => {
 
   if (cart.length > 0 && authorArr.length > 0) {
     return (
-      <Box sx={{ backgroundColor: "rgba(0,0,0,.06)", height: "2000px" }}>
-        <SnackbarComponent />
+      <>
+        <Header />
         <Box
           sx={{
-            width: "100vw",
-            display: "flex",
-            justifyContent: "center",
-            zIndex: 1,
-            position: "fixed",
-            bottom: 0,
+            backgroundColor: "rgba(0,0,0,.06)",
+            height: "2000px",
+            borderTop: "1px solid #cccccc",
           }}>
-          <Total>
-            <CheckoutItems>
-              <Checkbox
-                {...label}
-                color="error"
-                value={selected.length}
-                checked={selected.length}
-                onChange={(e) => handleChangeAll(e)}
-              />
-              <Typo15>
-                Select All ({selected.length}/{cart.length})
-              </Typo15>
-              <Typo15>Delete All </Typo15>
-            </CheckoutItems>
-            <CheckoutItems>
-              <Typo15 sx={{ display: "flex", alignItems: "center" }}>
-                Total ({selected.length} items):
-                <Typography sx={{ fontSize: "26px", color: "var(--pinky)" }}>
-                  &nbsp;{toVnd(sumPrice)}
-                </Typography>{" "}
-              </Typo15>
-              <ButtonCheckout onClick={() => handleCheckOut()}>
-                Check out
-              </ButtonCheckout>
-            </CheckoutItems>
-          </Total>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "30px 0",
-          }}>
-          <Typography
+          <SnackbarComponent />
+          <Box
             sx={{
-              fontSize: "26px",
-              width: "80vw",
-              borderBottom: "1px solid #cccccc",
-              padding: "20px 0",
+              width: "100vw",
+              display: "flex",
+              justifyContent: "center",
+              zIndex: 1,
+              position: "fixed",
+              bottom: 0,
             }}>
-            My Cart
-          </Typography>
-        </Box>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Box sx={{ width: "80vw" }}>
-            <Box sx={{ color: "var(--pinky)" }}>
-              <FaLocationDot />
-              &nbsp;&nbsp;Delivery Address
-            </Box>
-            <Box sx={{ display: "flex" }}>
-              {infAddress && (
-                <>
-                  <Typo15 sx={{ fontWeight: 500 }}>
-                    {infAddress.fullName}&nbsp;&nbsp;({infAddress.phoneNumber})
-                  </Typo15>
-                  <Typo15>{infAddress.address}</Typo15>
-                </>
-              )}
-
+            <Total>
+              <CheckoutItems>
+                <Checkbox
+                  {...label}
+                  color="error"
+                  value={selected.length}
+                  checked={selected.length}
+                  onChange={(e) => handleChangeAll(e)}
+                />
+                <Typo15>
+                  Select All ({selected.length}/{cart.length})
+                </Typo15>
+                <Typo15>Delete All </Typo15>
+              </CheckoutItems>
+              <CheckoutItems>
+                <Typo15 sx={{ display: "flex", alignItems: "center" }}>
+                  Total ({selected.length} items):
+                  <Typography sx={{ fontSize: "26px", color: "var(--pinky)" }}>
+                    &nbsp;{toVnd(sumPrice)}
+                  </Typography>{" "}
+                </Typo15>
+                <ButtonCheckout onClick={() => handleCheckOut()}>
+                  Check out
+                </ButtonCheckout>
+              </CheckoutItems>
+            </Total>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "30px 0",
+            }}>
+            <Typography
+              sx={{
+                fontSize: "26px",
+                width: "80vw",
+                // borderBottom: "1px solid #cccccc",
+                padding: "20px 0",
+              }}>
+              My Cart
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Box sx={{ width: "80vw" }}>
+              <Box sx={{ color: "var(--pinky)" }}>
+                <FaLocationDot />
+                &nbsp;&nbsp;Delivery Address
+              </Box>
+              <Box sx={{ display: "flex", width: "80vw" }}>
+                {infAddress && (
+                  <>
+                    <Typo15 sx={{ fontWeight: 500 }}>
+                      {infAddress.fullName}&nbsp;&nbsp;({infAddress.phoneNumber}
+                      )
+                    </Typo15>
+                    <Typo15>{infAddress.address}</Typo15>
+                  </>
+                )}
+              </Box>
               <DeliveryAdress />
             </Box>
           </Box>
-        </Box>
-        <Box>
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: "flex",
-              justifyContent: "center",
-              flexDirection: "column",
-              margin: "30px 148px",
-            }}>
-            {authorArr.length > 0 &&
-              authorArr.map((item, index) => (
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    width: "80vw",
-                    backgroundColor: "white",
-                    boxShadow: "0 4px 15px 0 rgba(0, 0, 0, 0.2)",
-                    borderRadius: "5px",
-                    margin: "0 0 20px 0",
-                  }}>
-                  <Grid xs={12}>
-                    <Item
-                      sx={{
-                        height: "50px",
-                        borderBottom: "1px solid #cccccc",
-                      }}>
-                      {/* <Checkbox
-                        {...label}
-                        color="default"
-                        value={selected.length}
-                        checked={selected.length}
-                        onChange={(e) => handleChangeAll(e)}
-                      /> */}
-                      {item}&nbsp;&nbsp;
-                      <AiTwotoneShop style={{ fontSize: "120%" }} />
-                    </Item>
-                  </Grid>
-                  {cart.map((itemPro) => {
-                    if (itemPro.authorName === item) {
-                      return (
-                        <>
-                          <Grid xs={4}>
-                            <Item sx={{ display: "flex" }}>
-                              <Checkbox
-                                {...label}
-                                color="error"
-                                value={itemPro.Product.id}
-                                // name={itemPro.Product.price}
-                                name={[
-                                  itemPro.Product.price,
-                                  itemPro.Product.IdAuthor,
-                                ]}
-                                checked={selected.includes(itemPro.Product.id)}
-                                onChange={(e) => {
-                                  setSellerId(itemPro.Product.IdAuthor);
-                                  handleChooseProduct(e);
-                                }}
-                              />
-                              <img
-                                src={itemPro.imageToBase64}
-                                alt="HInh anh"
-                                style={{ height: "80px", width: "80px" }}
-                              />
-                              <Typo14>
-                                &nbsp;&nbsp;{itemPro.Product.name}
-                              </Typo14>
-                            </Item>
-                          </Grid>
-                          <Grid xs={2}></Grid>
-                          <Grid xs={2}>
-                            <Item>{toVnd(itemPro.Product.price)}</Item>
-                          </Grid>
-                          <Grid xs={1.5}>
-                            <Item>
-                              <DivQuantity>
-                                <Button>—</Button>
-                                <Label>1</Label>
-                                <input
-                                  type="text"
-                                  style={{ display: "none" }}
+          <Box>
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: "column",
+                margin: "30px 148px",
+              }}>
+              {authorArr.length > 0 &&
+                authorArr.map((item, index) => (
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{
+                      width: "80vw",
+                      backgroundColor: "white",
+                      boxShadow: "0 4px 15px 0 rgba(0, 0, 0, 0.2)",
+                      borderRadius: "5px",
+                      margin: "0 0 20px 0",
+                    }}>
+                    <Grid xs={12}>
+                      <Item
+                        sx={{
+                          height: "50px",
+                          borderBottom: "1px solid #cccccc",
+                        }}>
+                        {/* <Checkbox
+                      {...label}
+                      color="default"
+                      value={selected.length}
+                      checked={selected.length}
+                      onChange={(e) => handleChangeAll(e)}
+                    /> */}
+                        {item}&nbsp;&nbsp;
+                        <AiTwotoneShop style={{ fontSize: "120%" }} />
+                      </Item>
+                    </Grid>
+                    {cart.map((itemPro) => {
+                      if (itemPro.authorName === item) {
+                        return (
+                          <>
+                            <Grid xs={4}>
+                              <Item sx={{ display: "flex" }}>
+                                <Checkbox
+                                  {...label}
+                                  color="error"
+                                  value={itemPro.Product.id}
+                                  // name={itemPro.Product.price}
+                                  name={[
+                                    itemPro.Product.price,
+                                    itemPro.Product.IdAuthor,
+                                  ]}
+                                  checked={selected.includes(
+                                    itemPro.Product.id
+                                  )}
+                                  onChange={(e) => {
+                                    setSellerId(itemPro.Product.IdAuthor);
+                                    handleChooseProduct(e);
+                                  }}
                                 />
-                                <Button sx={{ fontSize: "16px" }}>+</Button>
-                              </DivQuantity>
-                            </Item>
-                          </Grid>
-                          <Grid xs={2}>
-                            <Item>{toVnd(itemPro.Product.price)}</Item>
-                          </Grid>
-                          <Grid xs={0.3}>
-                            <MdCancel
-                              style={{ fontSize: "25px", color: "#7f7f7f" }}
-                            />
-                          </Grid>
-                        </>
-                      );
-                    }
-                  })}
-                  <Grid xs={8}>
-                    <Item
-                      sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                      }}>
-                      <FormControl
-                        variant="standard"
-                        sx={{ m: 1, minWidth: 120 }}>
-                        <InputLabel id="demo-simple-select-standard-label">
-                          Shipping
-                        </InputLabel>
-                        <Select
-                          labelId="demo-simple-select-standard-label"
-                          id="demo-simple-select-standard"
-                          value={shipping}
-                          onChange={handleChange}
-                          label="Shipping Methods">
-                          <MenuItem value={10}>Quickly</MenuItem>
-                          <MenuItem value={20}>Savings</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </Item>
+                                <img
+                                  src={itemPro.imageToBase64}
+                                  alt="HInh anh"
+                                  style={{ height: "80px", width: "80px" }}
+                                />
+                                <Typo14>
+                                  &nbsp;&nbsp;{itemPro.Product.name}
+                                </Typo14>
+                              </Item>
+                            </Grid>
+                            <Grid xs={2}></Grid>
+                            <Grid xs={2}>
+                              <Item>{toVnd(itemPro.Product.price)}</Item>
+                            </Grid>
+                            <Grid xs={1.5}>
+                              <Item>
+                                <DivQuantity>
+                                  <Button>—</Button>
+                                  <Label>1</Label>
+                                  <input
+                                    type="text"
+                                    style={{ display: "none" }}
+                                  />
+                                  <Button sx={{ fontSize: "16px" }}>+</Button>
+                                </DivQuantity>
+                              </Item>
+                            </Grid>
+                            <Grid xs={2}>
+                              <Item>{toVnd(itemPro.Product.price)}</Item>
+                            </Grid>
+                            <Grid xs={0.3}>
+                              <MdCancel
+                                style={{ fontSize: "25px", color: "#7f7f7f" }}
+                              />
+                            </Grid>
+                          </>
+                        );
+                      }
+                    })}
+                    <Grid xs={8}>
+                      <Item
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                        }}>
+                        <FormControl
+                          variant="standard"
+                          sx={{ m: 1, minWidth: 120 }}>
+                          <InputLabel id="demo-simple-select-standard-label">
+                            Shipping
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-standard-label"
+                            id="demo-simple-select-standard"
+                            value={shipping}
+                            onChange={handleChange}
+                            label="Shipping Methods">
+                            <MenuItem value={10}>Quickly</MenuItem>
+                            <MenuItem value={20}>Savings</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Item>
+                    </Grid>
+                    <Grid xs={1.5}>
+                      <Item>
+                        <Typo14>Receive in 3 days</Typo14>
+                      </Item>
+                    </Grid>
+                    <Grid xs={2}>
+                      <Item>{y}</Item>
+                    </Grid>
                   </Grid>
-                  <Grid xs={1.5}>
-                    <Item>
-                      <Typo14>Receive in 3 days</Typo14>
-                    </Item>
-                  </Grid>
-                  <Grid xs={2}>
-                    <Item>{y}</Item>
-                  </Grid>
-                </Grid>
-              ))}
+                ))}
+            </Box>
           </Box>
-        </Box>
 
-        <button onClick={() => handleTestApi()}>Test api</button>
-      </Box>
+          <button onClick={() => handleTestApi()}>Test api</button>
+        </Box>
+      </>
     );
   } else {
     return <Box>No Product In Your Cart</Box>;

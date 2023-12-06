@@ -74,10 +74,26 @@ const deliveryAddressSlice = createSlice({
   name: "delivery address",
   initialState: {
     deliveryAddress: null,
+    data: {},
   },
   reducers: {
     getDeliveryAddressInf: (state, action) => {
       state.deliveryAddress = action.payload;
+    },
+    setEmail: (state, action) => {
+      state.data.email = action.payload;
+    },
+    setFullName: (state, action) => {
+      state.data.fullName = action.payload;
+    },
+    setPhoneNumber: (state, action) => {
+      state.data.phoneNumber = action.payload;
+    },
+    setAddress: (state, action) => {
+      state.data.address = action.payload;
+    },
+    setUserId: (state, action) => {
+      state.data.userId = action.payload;
     },
   },
 });
@@ -114,6 +130,13 @@ const createOrdersSlice = createSlice({
 export const { idProduct } = productDetail.actions;
 export const { getCartStart, getCartSuccess, getCartFailed, getAuthorArray } =
   getCartSlice.actions;
-export const { getDeliveryAddressInf } = deliveryAddressSlice.actions;
+export const {
+  getDeliveryAddressInf,
+  setAddress,
+  setEmail,
+  setFullName,
+  setPhoneNumber,
+  setUserId,
+} = deliveryAddressSlice.actions;
 export const { setOrdersArray, setProductsArr } = createOrdersSlice.actions;
 export { productDetail, getCartSlice, deliveryAddressSlice, createOrdersSlice };

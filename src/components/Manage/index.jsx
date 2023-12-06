@@ -168,7 +168,7 @@ const Manage = () => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   return (
     <>
-      {user.data.typeRole !== "R1" && <Header />}
+      {/* {user.data.typeRole !== "R1" && <Header />} */}
 
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <Box sx={{ width: "80vw", margin: "0 0 80px 0" }}>

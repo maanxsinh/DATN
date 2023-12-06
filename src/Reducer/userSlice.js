@@ -49,6 +49,7 @@ const managementSlice = createSlice({
     data: null,
     isLoading: false,
     error: false,
+    role: null,
   },
   reducers: {
     getStart: (state) => {
@@ -75,6 +76,18 @@ const managementSlice = createSlice({
       state.isLoading = false;
       state.error = false;
       state.data = action.payload;
+    },
+    setRoleAdmin: (state) => {
+      state.role = "admin";
+    },
+    setRoleBuyer: (state) => {
+      state.role = "buyer";
+    },
+    setRoleSeller: (state) => {
+      state.role = "seller";
+    },
+    setRole: (state, action) => {
+      state.role = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -211,7 +224,15 @@ export const {
   logoutFailed,
 } = authSlice.actions;
 
-export const { getUsers, getProducts, getOrders } = managementSlice.actions;
+export const {
+  getUsers,
+  getProducts,
+  getOrders,
+  setRoleAdmin,
+  setRoleBuyer,
+  setRoleSeller,
+  setRole,
+} = managementSlice.actions;
 export const {
   editAddress,
   editEmail,

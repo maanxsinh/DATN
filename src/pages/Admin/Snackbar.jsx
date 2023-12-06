@@ -16,6 +16,7 @@ import {
   getProducts,
   getUsers,
   managementAction,
+  setRoleAdmin,
 } from "../../Reducer/userSlice";
 import { emitter } from "../../utils/emitter";
 
@@ -51,6 +52,7 @@ export default function Snackbar() {
 
   const handleGetOrders = () => {
     dispatch(getOrders());
+    dispatch(setRoleAdmin());
     const manage = "orders";
     const role = "admin";
     const statusName = "NEW";
