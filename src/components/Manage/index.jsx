@@ -21,6 +21,18 @@ import { emitter } from "../../utils/emitter";
 import SnackbarComponent from "../Snackbar";
 import { openSbTrue, setSnackbarMessage } from "../../Reducer/snackbarSlice";
 import CircularProgress from "@mui/material/CircularProgress";
+import EditProductInf from "../EditUser/editProductInf";
+import {
+  getProductId,
+  setDescriptionEdit,
+  setNameEdit,
+  setPriceEdit,
+  setSortEdit,
+  setStatusEdit,
+  setWarehouseEdit,
+  setWeightEdit,
+  setdataSource,
+} from "../../Reducer/manageSlice";
 
 const Manage = () => {
   const [sort, setSort] = useState("all");
@@ -294,9 +306,29 @@ const Manage = () => {
                           <BsFillTrash3Fill />
                           &nbsp;&nbsp;Delete
                         </Action>
-                        <Action>
-                          <AiFillEdit />
-                          &nbsp;&nbsp;Edit
+                        <Action
+                          onClick={() => {
+                            dispatch(getProductId(item.id));
+                            // dispatch(
+                            //   setdataSource({
+                            //     name: item.name,
+                            //     // sort: item.sort,
+                            //     price: item.price,
+                            //     warehouse: item.warehouse,
+                            //     description: item.description,
+                            //     weight: item.weight,
+                            //     // status: item.status,
+                            //   })
+                            // );
+                            dispatch(setNameEdit(item.name));
+                            // dispatch(setSortEdit(""));
+                            dispatch(setPriceEdit(item.price));
+                            dispatch(setWarehouseEdit(item.warehouse));
+                            dispatch(setDescriptionEdit(item.description));
+                            dispatch(setWeightEdit(item.weight));
+                            // dispatch(setStatusEdit(null));
+                          }}>
+                          <EditProductInf />
                         </Action>
                       </Item>
                     </Grid>

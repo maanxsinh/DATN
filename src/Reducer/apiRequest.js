@@ -112,6 +112,17 @@ const uploadProduct = async (dataPro, dispatch, navigate) => {
   }
 };
 
+const editProduct = async (data, productId, IdAuthor, dispatch) => {
+  try {
+    let res = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/editProduct`,
+      { data, productId }
+    );
+    // await loadingProduct(null, IdAuthor, dispatch);
+    console.log("---edit product:", res);
+  } catch (e) {}
+};
+
 //BUYER REQUEST
 
 const isProductExist = async (data) => {
@@ -218,6 +229,18 @@ const cancelOrders = async (productId) => {
   } catch (e) {}
 };
 
+const confirmOrders = async (productId) => {
+  try {
+    let res = await axios.post(
+      `${process.env.REACT_APP_PORT_API}/confirmOrders`,
+      {
+        productId,
+      }
+    );
+    console.log("---confirm orders:", res);
+  } catch (e) {}
+};
+
 // HOME REQUEST
 
 const loadingProduct = async (statusId, IdAuthor, dispatch) => {
@@ -251,4 +274,6 @@ export {
   createDeliveryAddress,
   updateDeliveryAddress,
   cancelOrders,
+  confirmOrders,
+  editProduct,
 };

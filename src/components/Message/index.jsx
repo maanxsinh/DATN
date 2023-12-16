@@ -71,20 +71,54 @@ const Message = () => {
               }}
             />
           </Box>
-
-          <BoxElement
-            onClick={() => {
-              handleShowMessage();
-            }}>
-            <img
-              src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
-              style={{ width: "55px", height: "55px", borderRadius: "50px" }}
-            />
-            <Box sx={{ margin: "0 0 0 10px" }}>
-              <Typo15>{dataConversation.imsender[0].id}</Typo15>
-              <Typo12>gia dt nay bao nhieu?</Typo12>
-            </Box>
-          </BoxElement>
+          {dataConversation &&
+            dataConversation.imsender.length > 0 &&
+            dataConversation.partner.map((item) => {
+              return (
+                <BoxElement
+                  key={item.id}
+                  onClick={() => {
+                    handleShowMessage();
+                  }}>
+                  <img
+                    src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
+                    style={{
+                      width: "55px",
+                      height: "55px",
+                      borderRadius: "50px",
+                    }}
+                  />
+                  <Box sx={{ margin: "0 0 0 10px" }}>
+                    <Typo15>{item.fullName}</Typo15>
+                    <Typo12>gia dt nay bao nhieu?</Typo12>
+                  </Box>
+                </BoxElement>
+              );
+            })}
+          {dataConversation &&
+            dataConversation.imreceiver.length > 0 &&
+            dataConversation.imreceiver.map((item) => {
+              return (
+                <BoxElement
+                  key={item.id}
+                  onClick={() => {
+                    handleShowMessage();
+                  }}>
+                  <img
+                    src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
+                    style={{
+                      width: "55px",
+                      height: "55px",
+                      borderRadius: "50px",
+                    }}
+                  />
+                  <Box sx={{ margin: "0 0 0 10px" }}>
+                    <Typo15>{item.User.fullName}</Typo15>
+                    <Typo12>gia dt nay bao nhieu?</Typo12>
+                  </Box>
+                </BoxElement>
+              );
+            })}
         </Container>
       ) : (
         <Conversation />

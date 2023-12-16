@@ -10,7 +10,7 @@ import {
   getCartSlice,
   productDetail,
 } from "./buyerSlice.js";
-import { manageProduct } from "./manageSlice.js";
+import { editProductSlice, manageProduct } from "./manageSlice.js";
 import { loadProductSlice } from "./loadProductSlice.js";
 import { snackbarSlice } from "./snackbarSlice.js";
 import { addToCartSlice } from "./addToCartSlice.js";
@@ -40,6 +40,7 @@ const store = configureStore({
     manageSlice: managementSlice.reducer,
     editUserSlice: editUserSlice.reducer,
     createOrdersSlice: createOrdersSlice.reducer,
+    editProductSlice: editProductSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

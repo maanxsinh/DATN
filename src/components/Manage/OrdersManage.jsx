@@ -8,6 +8,8 @@ import {
   loadingProduct,
   confirmProduct,
   getDeliveryAddress,
+  cancelOrders,
+  confirmOrders,
 } from "../../Reducer/apiRequest";
 import { AiFillEdit } from "react-icons/ai";
 import { BsFillTrash3Fill } from "react-icons/bs";
@@ -22,7 +24,7 @@ import { emitter } from "../../utils/emitter";
 import SnackbarComponent from "../Snackbar";
 import { openSbTrue, setSnackbarMessage } from "../../Reducer/snackbarSlice";
 import CircularProgress from "@mui/material/CircularProgress";
-import { formatDate, toVnd } from "../../utils/commonUtils";
+import { formatDate, setSnackbar, toVnd } from "../../utils/commonUtils";
 import { managementAction } from "../../Reducer/userSlice";
 import { MdDone } from "react-icons/md";
 
@@ -71,13 +73,13 @@ const OrdersManage = () => {
   const handleLoadOrders = (sort, manage, role, statusName) => {
     setSort(sort);
     setSelected([]);
-    if (user.data.typeRole === "R1") {
+    if (user?.data.typeRole === "R1") {
       const userId = null;
       dispatch(managementAction({ manage, role, userId, statusName }));
       console.log(">>> R1");
     } else {
-      const userId = user.data.id;
-      console.log(">>> R2:", user.data.id);
+      const userId = user?.data.id;
+      console.log(">>> R2:", user?.data.id);
       dispatch(managementAction({ manage, role, userId, statusName }));
     }
   };
@@ -121,31 +123,21 @@ const OrdersManage = () => {
     }
   };
   const handleAction = async () => {
-    setSelected([]);
+    // setSelected([]);
     handleClose();
     dispatch(setSnackbarMessage("success"));
     dispatch(openSbTrue());
-    if (action === "confirm") {
-      if (user.data.typeRole === "R1") {
-        let IdAuthor = null;
-        await confirmProduct(selected, null, IdAuthor, dispatch);
-      } else {
-        let IdAuthor = user.data.id;
-        await confirmProduct(selected, null, IdAuthor, dispatch);
-      }
-      emitter.on("EVENT_CONFIRM_DATA");
-      console.log(">>>confirm");
+    if (action === "cancel") {
+      await cancelOrders(selected);
+      setSnackbar("success", "Cancel orders successfull!", dispatch);
+      setSelected([]);
       setAction(null);
-    } else if (action === "delete") {
-      if (user.data.typeRole === "R1") {
-        let IdAuthor = null;
-        await deleteProduct(selected, null, IdAuthor, dispatch);
-      } else {
-        let IdAuthor = user.data.id;
-        await deleteProduct(selected, null, IdAuthor, dispatch);
-      }
-      emitter.on("EVENT_DELETE_DATA", () => {});
-      console.log(">>>delete");
+    } else if (action === "confirm") {
+      await confirmOrders(selected);
+      setSnackbar("success", "Confirm orders successfull!", dispatch);
+      setSelected([]);
+      setAction(null);
+    } else if (action === "complete") {
       setAction(null);
     }
   };
@@ -367,7 +359,9 @@ const OrdersManage = () => {
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
               <Button onClick={() => handleAction()} autoFocus>
-                {action === "confirm" ? "Confirm" : "Delete"}
+                {action === "confirm" && "Confirm"}
+                {action === "cancel" && "Cancel"}
+                {action === "complete" && "Complete"}
               </Button>
             </DialogActions>
           </Dialog>
