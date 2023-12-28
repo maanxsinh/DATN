@@ -13,6 +13,7 @@ import Cart from "./pages/Cart";
 import TheMap from "./components/GgMap";
 import AdminManage from "./pages/Admin";
 import Management from "./pages/Users/Management";
+import io from "socket.io-client";
 
 const theme = createTheme({
   typography: {
@@ -21,6 +22,7 @@ const theme = createTheme({
 });
 
 const App = () => {
+  let socket = io("http://localhost:8080");
   return (
     <BrowserRouter>
       <Routes>

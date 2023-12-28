@@ -11,8 +11,16 @@ import {
   showAllMessage,
   hiddenAll,
   getAllConversation,
+  getMessage,
+  setPartner,
+  setConversationId,
+  setSenderId,
+  setReceiverId,
 } from "../../Reducer/messageSlice";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:8080");
 
 const Message = () => {
   const dispatch = useDispatch();
@@ -32,10 +40,20 @@ const Message = () => {
   const [showConversation, setShow] = useState(false);
   const [showMess123, setShow123] = useState(false);
 
-  const handleShowMessage = async () => {
-    await dispatch(showMessage());
+  const handleShowMessage = async (conversationId, receiverId) => {
+    const userId = currentUser.data.id;
+    socket.emit("join_room", conversationId);
+    dispatch(showMessage());
+    dispatch(getMessage({ conversationId, userId }));
+    dispatch(setConversationId(conversationId));
+    dispatch(setSenderId(userId));
+    dispatch(setReceiverId(receiverId));
     setShow123(true);
-    console.log(">>>showMess", showMess);
+    console.log(">>>showMess", conversationId, userId);
+  };
+
+  const handleTest = () => {
+    console.log("---SOCKET:", socket.id);
   };
   return (
     <Box sx={{ position: "fixed", bottom: 0, right: 20 }}>
@@ -73,12 +91,13 @@ const Message = () => {
           </Box>
           {dataConversation &&
             dataConversation.imsender.length > 0 &&
-            dataConversation.partner.map((item) => {
+            dataConversation.imsender.map((item) => {
               return (
                 <BoxElement
                   key={item.id}
                   onClick={() => {
-                    handleShowMessage();
+                    handleShowMessage(item.id, item.member?.id);
+                    dispatch(setPartner(item.member?.fullName));
                   }}>
                   <img
                     src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
@@ -89,7 +108,7 @@ const Message = () => {
                     }}
                   />
                   <Box sx={{ margin: "0 0 0 10px" }}>
-                    <Typo15>{item.fullName}</Typo15>
+                    <Typo15>{item.member.fullName}</Typo15>
                     <Typo12>gia dt nay bao nhieu?</Typo12>
                   </Box>
                 </BoxElement>
@@ -102,7 +121,8 @@ const Message = () => {
                 <BoxElement
                   key={item.id}
                   onClick={() => {
-                    handleShowMessage();
+                    handleShowMessage(item.id, item.master?.id);
+                    dispatch(setPartner(item.master?.fullName));
                   }}>
                   <img
                     src="https://as1.ftcdn.net/v2/jpg/03/53/11/00/1000_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg"
@@ -113,15 +133,16 @@ const Message = () => {
                     }}
                   />
                   <Box sx={{ margin: "0 0 0 10px" }}>
-                    <Typo15>{item.User.fullName}</Typo15>
+                    <Typo15>{item.master?.fullName}</Typo15>
                     <Typo12>gia dt nay bao nhieu?</Typo12>
                   </Box>
                 </BoxElement>
               );
             })}
+          <button onClick={() => handleTest()}>test</button>
         </Container>
       ) : (
-        <Conversation />
+        <Conversation socket={socket} />
       )}
     </Box>
   );

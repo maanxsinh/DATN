@@ -34,9 +34,9 @@ const Content = () => {
             </Item>
           </Grid>
           <Grid xs={9.5}>
-            <Item elevation={0} sx={{ borderLeft: "1px solid #cccccc" }}>
+            {/* <Item elevation={0} sx={{ borderLeft: "1px solid #cccccc" }}>
               <Products />
-            </Item>
+            </Item> */}
           </Grid>
         </Grid>
       </Box>

@@ -73,12 +73,21 @@ const setSnackbar = (severity, message, dispatch) => {
 };
 
 const formatDate = (myDate) => {
-  let str = "2018-07-30T15:01:13Z";
-  let date = moment(myDate);
-  let result = date.format("1111");
-  return result;
-
-  // console.log("---data format is:", date.format("llll"));
+  var date = new Date("2017-02-17T22:32:25.000Z");
+  var dateSource = new Date(myDate);
+  // console.log("typeof date:", dateSource);
+  // console.log("typeof date:", typeof dateSource);
+  var formatOptions = {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  };
+  var dateString = dateSource.toLocaleDateString("en-US", formatOptions);
+  // console.log("---data format is:", dateString);
+  return dateString;
 };
 
 module.exports = {

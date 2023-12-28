@@ -3,7 +3,7 @@ import { authSlice, editUserSlice, managementSlice } from "./userSlice.js";
 import { uploadProductSlice } from "./sellerSlice.js";
 import { homeProductSlice } from "./homeProductSlice.js";
 import logger from "redux-logger";
-import { messageSlice } from "./messageSlice.js";
+import { messageSlice, sendMessageSlice } from "./messageSlice.js";
 import {
   createOrdersSlice,
   deliveryAddressSlice,
@@ -41,6 +41,7 @@ const store = configureStore({
     editUserSlice: editUserSlice.reducer,
     createOrdersSlice: createOrdersSlice.reducer,
     editProductSlice: editProductSlice.reducer,
+    sendMessageSlice: sendMessageSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
