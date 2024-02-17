@@ -14,6 +14,7 @@ import TheMap from "./components/GgMap";
 import AdminManage from "./pages/Admin";
 import Management from "./pages/Users/Management";
 import io from "socket.io-client";
+import Post from "./pages/Users/Post";
 
 const theme = createTheme({
   typography: {
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/map" element={<TheMap />} />
         <Route path="/admin" element={<AdminManage />} />
+        <Route path="/post" element={<Post />} />
       </Routes>
     </BrowserRouter>
   );

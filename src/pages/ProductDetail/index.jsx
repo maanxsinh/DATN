@@ -33,8 +33,8 @@ const ProductDetail = () => {
     // console.log(">>>image:", data.imageToBase64);
   }, []);
   const handleContact = async () => {
-    let ID1 = currentUser.data.id;
-    let ID2 = data.User.id;
+    let ID1 = currentUser?.data?.id;
+    let ID2 = data?.User.id;
     await commonUtils.createConversation(
       currentUser,
       navigate,
@@ -47,11 +47,10 @@ const ProductDetail = () => {
   };
 
   const handleAddToCart = async () => {
-    // console.log("currentUser", currentUser.data.id, "data Product:", data);
     const dataProduct = {
-      authorName: data.User.fullName,
-      ownCartId: currentUser.data.id,
-      productId: data.id,
+      authorName: data?.User.fullName,
+      ownCartId: currentUser?.data?.id,
+      productId: data?.id,
       statusName: "IN CART",
     };
     console.log(">>>dataProduct:", dataProduct);
@@ -83,7 +82,7 @@ const ProductDetail = () => {
           <div>
             <img
               alt="productImage"
-              src={data.imageToBase64}
+              src={data?.imageToBase64}
               style={{
                 height: "586px",
                 width: "586px",
@@ -137,12 +136,13 @@ const ProductDetail = () => {
         </Item>
         <Item>
           <div style={{ marginLeft: "42px" }}>
-            <Typo20 gutterBottom>{data.name}</Typo20>
-            <Typo16 gutterBottom>by {data.User.fullName}</Typo16>
+            <Typo20 gutterBottom>{data?.name}</Typo20>
+            <Typo16 gutterBottom>by {data?.User.fullName}</Typo16>
             <Span13>★★★★★</Span13>
             <Span13 sx={{ marginLeft: "10px" }}>1 review</Span13>
             <Typo16 sx={{ marginTop: "75px", fontWeight: "500" }} gutterBottom>
-              {toVnd(data.price)}
+              {/* {toVnd(data?.price)} */}
+              {data?.price}
             </Typo16>
             <Typo16 sx={{ marginTop: "40px" }} gutterBottom>
               MODEL

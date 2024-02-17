@@ -45,7 +45,7 @@ const Header = () => {
       <div className="Header">
         <div className="logo">
           <img
-            src="https://cdn.dribbble.com/users/844704/screenshots/17336702/media/5ba4c28448fb1f7bad2391c9acb53506.png"
+            src="https://upload.wikimedia.org/wikipedia/vi/e/ef/Logo_%C4%90%E1%BA%A1i_h%E1%BB%8Dc_B%C3%A1ch_Khoa_H%C3%A0_N%E1%BB%99i.svg"
             style={{ height: "69px", width: "93px" }}
           />
         </div>

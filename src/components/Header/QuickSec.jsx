@@ -63,7 +63,8 @@ const QuickSec = () => {
             "&:hover": {
               color: "#db214c",
             },
-          }}>
+          }}
+          onClick={() => navigate("/post")}>
           Buying
         </Typo>
       </Box>

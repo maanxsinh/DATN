@@ -6,9 +6,13 @@ import logger from "redux-logger";
 import { messageSlice, sendMessageSlice } from "./messageSlice.js";
 import {
   createOrdersSlice,
+  createPostSlice,
   deliveryAddressSlice,
   getCartSlice,
+  getCommentSlice,
+  getPostSlice,
   productDetail,
+  sendCommentSlice,
 } from "./buyerSlice.js";
 import { editProductSlice, manageProduct } from "./manageSlice.js";
 import { loadProductSlice } from "./loadProductSlice.js";
@@ -42,6 +46,10 @@ const store = configureStore({
     createOrdersSlice: createOrdersSlice.reducer,
     editProductSlice: editProductSlice.reducer,
     sendMessageSlice: sendMessageSlice.reducer,
+    getPostSlice: getPostSlice.reducer,
+    sendCommentSlice: sendCommentSlice.reducer,
+    getCommentSlice: getCommentSlice.reducer,
+    createPostSlice: createPostSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

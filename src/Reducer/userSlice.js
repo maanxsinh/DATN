@@ -179,11 +179,22 @@ const editUserSlice = createSlice({
     editTypeRole: (state, action) => {
       state.data.typeRole = action.payload;
     },
+    editImage: (state, action) => {
+      state.data.image = action.payload;
+    },
     getUserIdEdit: (state, action) => {
       state.userId = action.payload;
     },
     resetData: (state, action) => {
-      state.data = {};
+      state.data = {
+        typeRole: "R2",
+        email: "",
+        password: "",
+        fullName: "",
+        address: "",
+        phoneNumber: "",
+        image: undefined,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -241,6 +252,7 @@ export const {
   editPhoneNumber,
   editPassword,
   editTypeRole,
+  editImage,
   getUserIdEdit,
   resetData,
 } = editUserSlice.actions;

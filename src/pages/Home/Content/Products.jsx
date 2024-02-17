@@ -28,7 +28,6 @@ const Products = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser);
   const [data, setData] = useState(null);
   const [npage, setNpage] = useState(null);
-  const [IdProduct, setIDproduct] = useState(null);
   const dispatch = useDispatch();
 
   //main
@@ -65,11 +64,11 @@ const Products = () => {
     const numbers = [...Array(npage + 1).keys()];
   }
 
-  // const handleClickProduct = async (e) => {
-  //   console.log(">>>idProductDetail:", idProductDetail);
-  //   console.log("IDproduct:", IDproduct);
-  //   const data = dispatch(loadingProductDetail(IDproduct));
-  // };
+  const handleClickProduct = async (idPro) => {
+    dispatch(idProduct(idPro));
+    dispatch(loadingProductDetail(idPro));
+    navigate(`/productDetail/${idPro}`);
+  };
 
   const handleTestApi = async () => {
     // let id = "5";
@@ -92,12 +91,8 @@ const Products = () => {
               <Grid xs={3} key={item.id}>
                 <Div
                   key={item.id}
-                  onClick={async (e) => {
-                    setIDproduct(item.id);
-                    dispatch(idProduct(item.id));
-                    // handleClickProduct();
-                    await dispatch(loadingProductDetail(item.id));
-                    navigate(`/productDetail/${item.id}`);
+                  onClick={() => {
+                    handleClickProduct(item.id);
                   }}>
                   <img
                     src={item.imageToBase64}
@@ -147,7 +142,7 @@ const Products = () => {
             );
           })}
         <Grid xs={3}>
-          <button onClick={() => handleTestApi()}>test</button>
+          {/* <button onClick={() => handleTestApi()}>test</button> */}
         </Grid>
       </Grid>
       <Stack spacing={2}>

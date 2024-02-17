@@ -179,7 +179,7 @@ export default function PrimarySearchAppBar() {
               noWrap
               component="div"
               sx={{ display: { xs: "none", sm: "block" } }}>
-              MUI
+              HOME
             </Typography>
             <Search>
               <SearchIconWrapper>

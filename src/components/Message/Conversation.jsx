@@ -33,7 +33,6 @@ const Conversation = ({ socket }) => {
   useEffect(() => {
     socket.on("receive_message", (Message) => {
       setArrMsg((oldArr) => [...oldArr, Message]);
-
       // dispatch(setArrDataMessage(Message));
       // setMsg(Message);
     });
@@ -195,7 +194,7 @@ const Conversation = ({ socket }) => {
               }}
             />
           </Box>
-          <button onClick={() => handleTest()}>TEST</button>
+          {/* <button onClick={() => handleTest()}>TEST</button> */}
         </TypingText>
       </ConversationShow>
     );

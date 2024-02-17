@@ -33,6 +33,7 @@ const loginApp = async (email, password, dispatch, navigate) => {
     } else {
       navigate("/");
     }
+    return res;
   } catch (e) {
     dispatch(loginFailed());
   }
@@ -78,13 +79,17 @@ const editUser = async (data, userId, dispatch) => {
   return res;
 };
 
-const createUser = async (data, dispatch) => {
+const createUser = async (data, dispatch, email) => {
   let res = await axios.post(`${process.env.REACT_APP_PORT_API}/createUser`, {
     data,
+    email,
   });
-  console.log("edit user:", res);
+  console.log("create user:", res);
   const manage = "users";
-  dispatch(managementAction({ manage }));
+  if (dispatch) {
+    dispatch(managementAction({ manage }));
+  }
+
   return res;
 };
 
